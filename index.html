@@ -124,6 +124,28 @@
   .switch-row > i { font-size:16px; flex:none; }
 
   a.ap-button { text-decoration:none; }
+
+  /* Inbox card: expandable lists under the tiles */
+  .tile-foot { display:flex; align-items:center; gap:var(--ref-spacing-xs); flex-wrap:wrap; margin-top:auto; }
+  .toggle-link { background:none; border:0; padding:0; font:inherit; cursor:pointer; }
+  .toggle-link .ap-icon-chevron-down { transition:transform 75ms; display:inline-block; }
+  .toggle-link[aria-expanded="true"] .ap-icon-chevron-down { transform:rotate(180deg); }
+  .tile.is-open { box-shadow:inset 0 0 0 1px var(--ref-color-electric-blue-100); }
+  .xlist { border:1px solid var(--ref-color-grey-20); border-radius:var(--ref-border-radius-md); overflow:hidden; }
+  .xhead { display:flex; align-items:center; gap:var(--ref-spacing-xs); padding:var(--ref-spacing-xs) var(--ref-spacing-sm); background:var(--ref-color-grey-05); border-bottom:1px solid var(--ref-color-grey-20); flex-wrap:wrap; }
+  .xhead .ap-button { margin-left:auto; }
+  .xrow { display:grid; grid-template-columns:auto 16px minmax(0,1fr) auto; gap:var(--ref-spacing-xs); align-items:center; padding:var(--ref-spacing-xs) var(--ref-spacing-sm); border-bottom:1px solid var(--ref-color-grey-20); }
+  .xrow:last-child { border-bottom:0; }
+  .xrow > i { font-size:16px; }
+  .xrow.off .stack { opacity:.6; }
+  .xtopic { display:flex; flex-direction:column; gap:var(--ref-spacing-xxs); padding:var(--ref-spacing-xs) var(--ref-spacing-sm); background:var(--ref-color-grey-05); border-bottom:1px solid var(--ref-color-grey-20); }
+  .xtopic .row .ap-caption { margin-left:auto; }
+  .xcall { display:flex; flex-direction:column; gap:var(--ref-spacing-xxs); padding:var(--ref-spacing-xs) var(--ref-spacing-sm); border-bottom:1px solid var(--ref-color-grey-20); }
+  .xcall:last-child { border-bottom:0; }
+  .xcall .row > i { font-size:16px; }
+  .xcall .acts { display:flex; gap:var(--ref-spacing-xs); justify-content:flex-end; align-items:center; flex-wrap:wrap; }
+  .decided { display:inline-flex; align-items:center; gap:var(--ref-spacing-xxs); margin-right:auto; }
+  .decided.ok { color:var(--ref-color-green-150); }
   .snack { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:80; }
   .proto-note { position:fixed; right:16px; bottom:16px; z-index:70; }
 
@@ -233,12 +255,101 @@ function snack(text, undoFn, kind = "success") {
   clearTimeout(snack.t); snack.t = setTimeout(() => (s.hidden = true), undoFn ? 6000 : 2800);
 }
 
+
+const NET = { IG: ["instagram-official", "Instagram"], FB: ["facebook-official", "Facebook"], LI: ["linkedin-official", "LinkedIn"], G: ["google-my-business-official", "Google"], TT: ["tiktok-official", "TikTok"] };
+const INBOX = {
+  spam: [
+    { n: "IG", who: "@win.cash.now", when: "Sat 22:14", text: "🔥 Win €500 now!!! Link in bio 🔥" },
+    { n: "IG", who: "@crypto_daily88", when: "Sat 20:02", text: "DM me to double your money in 24h" },
+    { n: "FB", who: "Promo Deals", when: "Sat 17:40", text: "Free iPhone for the first 100, click here" },
+    { n: "IG", who: "@followers.boost", when: "Sat 11:05", text: "Get 10k followers today, real accounts" },
+    { n: "TT", who: "@giftcard.drop", when: "Sun 09:31", text: "Claim your €100 gift card before midnight" },
+    { n: "FB", who: "Lucky Draw FR", when: "Sun 13:12", text: "You won! Confirm your address here" },
+    { n: "IG", who: "@lamps.outlet.cheap", when: "Sun 15:48", text: "Same lamp 80% cheaper on our site" },
+    { n: "IG", who: "@win.cash.now", when: "Sun 21:20", text: "Last chance!!! Link in bio" },
+    { n: "TT", who: "@promo.bot.22", when: "Mon 07:55", text: "Check my profile for a surprise 😉" },
+  ],
+  ready: [
+    { name: "Shipping abroad", reply: "Yes, we ship across Europe in 3 to 5 business days. Details: maisonlumen.com/shipping", items: [
+      { n: "IG", who: "Camille Roux", when: "Fri 19:02", text: "Do you ship to Belgium?" },
+      { n: "FB", who: "Lukas Meier", when: "Sat 09:15", text: "Delivery to Switzerland possible?" },
+      { n: "IG", who: "@ana.home", when: "Sat 12:40", text: "Do you deliver to Portugal?" },
+      { n: "IG", who: "@nordic.nest", when: "Sat 16:22", text: "Shipping to Denmark? 🙏" },
+      { n: "FB", who: "Sofia Rossi", when: "Sun 10:05", text: "Ship to Italy?" },
+      { n: "IG", who: "@lea.interiors", when: "Sun 14:31", text: "How long to Luxembourg?" },
+      { n: "LI", who: "Pieter de Vries", when: "Sun 18:44", text: "Do you ship to the Netherlands?" },
+      { n: "IG", who: "@maison.claire", when: "Mon 08:10", text: "Shipping to Spain, how much?" },
+    ] },
+    { name: "Is the Opale in stock?", reply: "The Opale is in stock in white and brass, online and in our stores.", items: [
+      { n: "IG", who: "@jules.decor", when: "Fri 20:11", text: "Opale in white still available?" },
+      { n: "IG", who: "Inès B.", when: "Sat 10:30", text: "When is the brass Opale back?" },
+      { n: "FB", who: "Marc Petit", when: "Sat 15:02", text: "Is the Opale in stock in Lyon?" },
+      { n: "TT", who: "@lou.home", when: "Sun 11:47", text: "Where can I buy the Opale??" },
+      { n: "IG", who: "@petit.salon", when: "Sun 16:20", text: "Still in stock after the TikTok? 😅" },
+      { n: "IG", who: "@atelier.vert", when: "Sun 19:58", text: "Opale available online?" },
+      { n: "FB", who: "Claire Morel", when: "Mon 08:42", text: "Do you have the Opale in brass?" },
+    ] },
+    { name: "Store opening hours", reply: "Our stores are open Tuesday to Saturday, 10:00 to 19:00.", items: [
+      { n: "G", who: "Nadia K.", when: "Sat 09:01", text: "Are you open on Sunday?" },
+      { n: "IG", who: "@city.walks", when: "Sat 13:25", text: "Lyon store hours?" },
+      { n: "FB", who: "Henri Blanc", when: "Sat 18:40", text: "Open on November 11?" },
+      { n: "G", who: "Emma L.", when: "Sun 10:12", text: "What time do you close on Saturday?" },
+      { n: "IG", who: "@weekend.paris", when: "Sun 15:33", text: "Open Monday?" },
+      { n: "FB", who: "Julien Faure", when: "Mon 07:30", text: "Opening hours this week?" },
+    ] },
+  ],
+  calls: [
+    { n: "G", who: "Thomas Girard", kind: "Review, 2 stars", when: "Sat 11:20", text: "Lamp arrived with a cracked shade. Still waiting for my refund.", why: "Negative review. Your rule: apologize and move to email.", action: "Send apology", done: "Apology sent" },
+    { n: "IG", who: "Inès Morel", kind: "Comment", when: "Sat 16:05", text: "Is this the lamp from the Le Monde article? Did the price go up?", why: "Price question with no approved reply yet.", action: "Send suggested reply", done: "Reply sent" },
+    { n: "FB", who: "Paul Vasseur", kind: "Message", when: "Sun 09:48", text: "Can I return a lamp bought in store by mail?", why: "Your returns policy changed last week.", action: "Send returns policy", done: "Policy sent" },
+    { n: "TT", who: "@lou.creates", kind: "Comment", when: "Sun 12:30", text: "Would you work with small creators? I have 12k followers", why: "Partnership request, not a sales lead.", action: "Assign to Marketing", done: "Assigned to Marketing" },
+    { n: "IG", who: "@studio.nord", kind: "Mention", when: "Sun 17:02", text: "Waited 40 min at your Lyon opening 😅 worth it though", why: "Mixed tone. A light thank-you usually works.", action: "Reply with thanks", done: "Reply sent" },
+    { n: "LI", who: "Claire Dumas", kind: "Comment", when: "Mon 08:20", text: "Are you hiring for the Lyon store?", why: "Hiring question, rarely seen.", action: "Send careers link", done: "Reply sent" },
+  ],
+};
+const readyAll = () => INBOX.ready.flatMap((t, ti) => t.items.map((_, i) => `${ti}-${i}`));
+S.open = null; S.off = { spam: new Set(), ready: new Set() }; S.calls = {};
+const selCount = (k) => (k === "spam" ? INBOX.spam.length : readyAll().length) - S.off[k].size;
+const callsLeft = () => INBOX.calls.length - Object.keys(S.calls).length;
+const net = (k) => `<i class="ap-icon-${NET[k][0]}" aria-label="${NET[k][1]}" title="${NET[k][1]}"></i>`;
+const check = (key, on, label) => `<label class="ap-checkbox-container"><input type="checkbox" data-sel="${key}" ${on ? "checked" : ""} aria-label="${esc(label)}"><i></i><span></span></label>`;
+
+function inboxTile(k, label) {
+  const open = S.open === k;
+  if (S.inbox[k]) {
+    const past = k === "spam" ? `${S.inbox[k]} hidden` : k === "ready" ? `${S.inbox[k]} sent` : "All decided";
+    return `<div class="tile done"><p class="ap-caption muted">${label}</p><p class="value">${k === "calls" ? INBOX.calls.length : S.inbox[k]}</p><p class="ap-caption-bold" style="color:var(--ref-color-green-150)">${icon("check")} ${past}</p></div>`;
+  }
+  const n = k === "calls" ? callsLeft() : selCount(k);
+  const total = k === "spam" ? INBOX.spam.length : k === "ready" ? readyAll().length : INBOX.calls.length;
+  const bulk = k === "calls" ? "" : `<button type="button" class="ap-button stroked grey" data-act="bulk" data-k="${k}" ${n ? "" : "disabled"}>${k === "spam" ? "Hide" : "Send"} ${n === total ? "all" : n}</button>`;
+  const toggle = `<button type="button" class="toggle-link ap-link small standalone" data-act="expand" data-k="${k}" aria-expanded="${open}" aria-controls="xl-${k}">${open ? "Hide list" : k === "calls" ? `Review the ${n}` : `See the ${total}`} <i class="ap-icon-chevron-down" aria-hidden="true"></i></button>`;
+  return `<div class="tile${open ? " is-open" : ""}"><p class="ap-caption muted">${label}</p><p class="value">${n}${k !== "calls" && n !== total ? `<span class="ap-caption muted"> of ${total} selected</span>` : ""}</p><div class="tile-foot">${bulk}${toggle}</div></div>`;
+}
+
+function inboxList(k) {
+  if (k === "spam") {
+    const n = selCount("spam"), all = n === INBOX.spam.length;
+    return `<div class="xlist" id="xl-spam"><div class="xhead"><label class="ap-checkbox-container${!all && n ? " indeterminate" : ""}"><input type="checkbox" data-selall="spam" ${all ? "checked" : ""}><i></i><span class="ap-body-bold">${n} of ${INBOX.spam.length} selected</span></label><span class="ap-caption muted">Unselect anything that isn't spam.</span><button type="button" class="ap-button stroked grey" data-act="bulk" data-k="spam" ${n ? "" : "disabled"}>Hide ${n} selected</button></div>
+      ${INBOX.spam.map((x, i) => { const on = !S.off.spam.has(String(i)); return `<div class="xrow${on ? "" : " off"}">${check("spam:" + i, on, `Select ${x.who}`)}${net(x.n)}<div class="stack"><p class="ap-body"><b>${esc(x.who)}</b> ${esc(x.text)}</p></div><p class="ap-caption muted">${x.when}</p></div>`; }).join("")}</div>`;
+  }
+  if (k === "ready") {
+    const n = selCount("ready"), total = readyAll().length, all = n === total;
+    return `<div class="xlist" id="xl-ready"><div class="xhead"><label class="ap-checkbox-container${!all && n ? " indeterminate" : ""}"><input type="checkbox" data-selall="ready" ${all ? "checked" : ""}><i></i><span class="ap-body-bold">${n} of ${total} selected</span></label><span class="ap-caption muted">One reply per topic, sent to each person.</span><button type="button" class="ap-button stroked grey" data-act="bulk" data-k="ready" ${n ? "" : "disabled"}>Send ${n} replies</button></div>
+      ${INBOX.ready.map((t, ti) => `<div class="xtopic"><div class="row"><p class="ap-body-bold">${esc(t.name)}</p><span class="ap-caption muted">${t.items.length} messages</span></div><p class="why ap-caption muted">${icon("sparkles-mermaid")}<span>Reply: “${esc(t.reply)}”</span></p></div>
+        ${t.items.map((x, i) => { const key = `${ti}-${i}`, on = !S.off.ready.has(key); return `<div class="xrow${on ? "" : " off"}">${check("ready:" + key, on, `Select ${x.who}`)}${net(x.n)}<div class="stack"><p class="ap-body"><b>${esc(x.who)}</b> ${esc(x.text)}</p></div><p class="ap-caption muted">${x.when}</p></div>`; }).join("")}`).join("")}</div>`;
+  }
+  return `<div class="xlist" id="xl-calls">${INBOX.calls.map((c, i) => { const v = S.calls[i]; return `<div class="xcall">
+      <div class="row">${net(c.n)}<p class="ap-body-bold">${esc(c.who)}</p><p class="ap-caption muted">${esc(c.kind)} · ${c.when}</p></div>
+      <p class="ap-body">${esc(c.text)}</p>
+      <p class="why ap-caption muted">${icon("sparkles-mermaid")}<span>${esc(c.why)}</span></p>
+      <div class="acts">${v ? `<span class="decided ${v === "ok" ? "ok" : "muted"} ap-caption-bold">${icon(v === "ok" ? "rounded-check_fill" : "clock")}${v === "ok" ? esc(c.done) : "Left in Inbox"}</span><button type="button" class="ap-button ghost grey" data-act="cundo" data-i="${i}">Undo</button>`
+        : `<button type="button" class="ap-button ghost grey" data-act="cskip" data-i="${i}">Leave in Inbox</button><button type="button" class="ap-button stroked grey" data-act="capprove" data-i="${i}">${esc(c.action)}</button>`}</div></div>`; }).join("")}</div>`;
+}
+
 function content(it) {
   if (it.id === "inbox") {
-    const t = [["spam", "9", "Spam comments", "Hide all", "hidden"], ["ready", "21", "Replies ready to send", "Send all", "sent"], ["calls", "6", "Need your call", "Review in Inbox", "opened in Inbox"]];
-    return `<div class="tiles">${t.map(([k, n, label, cta, past]) => S.inbox[k]
-      ? `<div class="tile done"><p class="ap-caption muted">${label}</p><p class="value">${n}</p><p class="ap-caption-bold" style="color:var(--ref-color-green-150)">${icon("check")} ${past}</p></div>`
-      : `<div class="tile"><p class="ap-caption muted">${label}</p><p class="value">${n}</p><button type="button" class="ap-button stroked grey" data-act="inbox" data-k="${k}">${cta}</button></div>`).join("")}</div>`;
+    return `<div class="tiles">${inboxTile("spam", "Spam comments")}${inboxTile("ready", "Replies ready to send")}${inboxTile("calls", "Need your call")}</div>${S.open && !S.inbox[S.open] ? inboxList(S.open) : ""}`;
   }
   if (it.id === "post") return `<div class="post"><img src="assets/post-lamp.jpg" alt="Opale lamp on a side table"><div class="stack">
       <div class="row"><i class="ap-icon-instagram-official" aria-hidden="true"></i><p class="ap-body-bold">Maison Lumen</p><p class="ap-caption muted">@maisonlumen</p></div>
@@ -315,13 +426,17 @@ function render() {
   $("feed").innerHTML = html;
 }
 
+function checkInboxDone() {
+  if (S.inbox.spam && S.inbox.ready && S.inbox.calls) { finish("inbox", `Inbox triaged: ${S.inbox.spam} spam hidden, ${S.inbox.ready} replies sent, 6 decisions made`); return true; }
+  return false;
+}
 function finish(id, text) {
   S.done[id] = text; render();
   snack(text, () => undo(id));
 }
 function undo(id) {
   delete S.done[id];
-  if (id === "inbox") S.inbox = {};
+  if (id === "inbox") { S.inbox = {}; S.calls = {}; S.off = { spam: new Set(), ready: new Set() }; S.open = null; }
   if (id === "gap") { S.pick = null; }
   render();
 }
@@ -343,15 +458,27 @@ document.addEventListener("click", (e) => {
     if (S.pick == null) { $("pickErr").textContent = "Pick one of the two drafts first."; return; }
     S.picking = false; finish("gap", `Wednesday 10:00 filled with “${S.pick === 0 ? "Behind the scenes at the workshop" : "Opale in white, close-up"}”`);
   }
-  if (act === "inbox") {
-    const k = el.dataset.k;
-    S.inbox[k] = true;
-    if (S.inbox.spam && S.inbox.ready && S.inbox.calls) return finish("inbox", ITEMS[0].done);
+  if (act === "expand") { const k = el.dataset.k; S.open = S.open === k ? null : k; render(); }
+  if (act === "bulk") {
+    const k = el.dataset.k, n = selCount(k);
+    if (!n) return;
+    S.inbox[k] = n; if (S.open === k) S.open = null;
+    if (checkInboxDone()) return;
     render();
-    snack(k === "spam" ? "9 spam comments hidden" : k === "ready" ? "21 replies sent" : "6 items opened in the Inbox", () => { delete S.inbox[k]; render(); });
+    snack(k === "spam" ? `${n} spam comments hidden` : `${n} replies sent`, () => { delete S.inbox[k]; render(); });
   }
+  if (act === "capprove" || act === "cskip") {
+    const i = el.dataset.i; S.calls[i] = act === "capprove" ? "ok" : "skip";
+    if (!callsLeft()) { S.inbox.calls = true; S.open = null; }
+    if (checkInboxDone()) return;
+    render();
+  }
+  if (act === "cundo") { delete S.calls[el.dataset.i]; delete S.inbox.calls; render(); }
 });
 document.addEventListener("change", (e) => {
+  const sel = e.target.dataset.sel, all = e.target.dataset.selall;
+  if (sel) { const [k, key] = sel.split(":"); if (e.target.checked) S.off[k].delete(key); else S.off[k].add(key); return render(); }
+  if (all) { if (e.target.checked) S.off[all].clear(); else (all === "spam" ? INBOX.spam.map((_, i) => String(i)) : readyAll()).forEach((x) => S.off[all].add(x)); return render(); }
   if (e.target.name === "draft") { S.pick = Number(e.target.value); const err = $("pickErr"); if (err) err.textContent = ""; }
   if (e.target.dataset.toggle) snack(`${e.target.dataset.toggle} ${e.target.checked ? "on" : "off"}`, null, "info");
 });

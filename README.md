@@ -13,4 +13,13 @@ Built with the Agorapulse design system (`@agorapulse/ui-theme` 22.0.7 and `@ago
 
 ## Exploration: Today, clean (`next.html`)
 
-A second take outside the design system: a clean off-white look with one plain font (Inter), white cards and black buttons, plus new patterns: a card deck you swipe right to act and left to snooze (or ← →), a ⌘K command bar, a live agent feed that types in new activity, a bento of numbers, a progress ring, and an All clear end state. The inbox card's Review buttons open a side panel to handle spam, drafted replies and "your call" items one by one (keep, hide, send, skip, edit a reply for one person or a whole group). Live: https://audreyalexandre3.github.io/today-proto/next.html
+A second take outside the design system, clean and light (off-white, Inter, white cards, black buttons).
+
+- Overview first: every item of the day in a list (Needs you, Worth a look, Good news, then Later and Done), the selected one open in a detail panel. Up and down arrows move through the list. Buttons say exactly what happens, and every action can be undone.
+- Inbox: bulk shortcuts, plus a side panel to handle spam, drafted replies and "your call" items one by one.
+- Draft a post: from the mention spike, a composer prefilled from what the agents know (the TikTok, the inbox questions, the Opale photo), with angles, quick edits, networks, a preview and suggested times. Scheduling for Wednesday 10:00 also completes the "Wednesday is empty" item.
+- ⌘K command bar, live agent feed, numbers below the list.
+
+`deck.html` keeps the earlier swipe-card version for comparison.
+
+Live: https://audreyalexandre3.github.io/today-proto/next.html

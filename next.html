@@ -240,6 +240,83 @@ h1 { margin:0; font-size:clamp(28px, 3vw, 40px); line-height:1.15; font-weight:6
 .dr-foot .sp { flex:1; font-size:13px; color:var(--muted); }
 @media (max-width:760px) { .row-it { grid-template-columns:22px 1fr; } .row-it .acts { grid-column:2; } }
 
+
+/* Day list + detail */
+.work { display:grid; grid-template-columns:320px minmax(0, 1fr); gap:20px; align-items:start; margin-bottom:36px; }
+.queue { position:sticky; top:16px; background:var(--card); border-radius:16px; box-shadow:0 0 0 1px var(--line); padding:8px; }
+.q-head { padding:10px 10px 12px; display:flex; flex-direction:column; gap:10px; }
+.q-top { display:flex; justify-content:space-between; align-items:baseline; font-size:14px; }
+.q-top b { font-weight:600; } .q-top span { color:var(--muted); font-size:12.5px; }
+.q-bar { height:4px; border-radius:2px; background:var(--glass2); overflow:hidden; }
+.q-bar i { display:block; height:100%; background:var(--fg); border-radius:2px; transition:width .5s cubic-bezier(.2,.9,.2,1); }
+.q-group { display:flex; justify-content:space-between; padding:14px 10px 6px; font-size:12px; font-weight:500; color:var(--faint); }
+.q-row { width:100%; display:grid; grid-template-columns:30px minmax(0, 1fr) auto; gap:10px; align-items:center; padding:9px 10px; border-radius:10px; text-align:left; transition:background .15s; }
+.q-row:hover { background:var(--card2); }
+.q-row.sel { background:var(--glass2); }
+.q-ico { width:30px; height:30px; border-radius:8px; background:var(--glass2); display:grid; place-items:center; color:var(--h); }
+.q-row.sel .q-ico { background:var(--card); box-shadow:0 0 0 1px var(--line); }
+.q-ico svg.i { width:16px; height:16px; }
+.q-t { display:block; font-size:14px; font-weight:500; line-height:1.3; }
+.q-m { display:block; font-size:12.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.q-time { font-size:12px; color:var(--faint); }
+.q-row.done .q-t, .q-row.later .q-t { color:var(--muted); font-weight:400; }
+.q-row.done .q-ico { color:var(--green); background:color-mix(in srgb, var(--green) 10%, var(--card)); }
+.q-row.later .q-ico { color:var(--muted); }
+.q-row.flash { animation:pop .35s ease-out; }
+.q-foot { display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-top:8px; padding:12px 10px 6px; border-top:1px solid var(--line); font-size:12px; color:var(--faint); }
+
+.pane { position:relative; background:var(--card); border-radius:20px; box-shadow:var(--shadow); padding:26px 28px 22px; display:flex; flex-direction:column; gap:16px; min-height:540px; }
+.pane.swap > * { animation:rise .3s ease-out both; }
+.pane.swap > *:nth-child(2) { animation-delay:.03s; } .pane.swap > *:nth-child(3) { animation-delay:.06s; } .pane.swap > *:nth-child(4) { animation-delay:.09s; }
+.pane .c-body { flex:1; }
+.c-body.dim { opacity:.45; pointer-events:none; }
+.state-box { display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:12px 14px; border-radius:12px; background:color-mix(in srgb, var(--green) 7%, var(--card)); box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--green) 25%, transparent); font-size:14px; }
+.state-box > svg.i { color:var(--green); }
+.state-box.snooze { background:var(--glass2); box-shadow:none; } .state-box.snooze > svg.i { color:var(--muted); }
+.state-box > span { flex:1; min-width:200px; }
+.pane .sky { height:auto; flex:1; box-shadow:none; background:none; padding:40px 0; }
+.sec-h { margin:0 0 14px; font-size:15px; font-weight:600; }
+.conn { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:12px; box-shadow:inset 0 0 0 1px var(--line); font-size:13.5px; }
+.conn > svg.i { color:#dc2626; } .conn span { flex:1; }
+
+/* Composer */
+.ctx { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.ctx-l { font-size:12.5px; color:var(--faint); margin-right:2px; }
+.ctx > span:not(.ctx-l) { display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 10px 0 6px; border-radius:8px; background:var(--glass2); font-size:12.5px; color:var(--muted); }
+.ctx > span svg.i { width:15px; height:15px; margin-left:2px; }
+.ctx b { color:var(--fg); font-weight:500; }
+.ctx .net { width:20px; height:20px; font-size:9px; border-radius:6px; }
+.cmp { display:grid; grid-template-columns:minmax(0, 1.3fr) minmax(220px, .7fr); gap:28px; flex:1; }
+.cmp-l { display:flex; flex-direction:column; gap:18px; }
+.lbl { display:block; font-size:12.5px; font-weight:500; color:var(--muted); margin-bottom:8px; }
+.seg2 { display:inline-flex; flex-wrap:wrap; padding:3px; border-radius:10px; background:var(--glass2); gap:2px; }
+.seg2 button { height:30px; padding:0 12px; border-radius:8px; font-size:13px; font-weight:500; color:var(--muted); }
+.seg2 button.on { background:var(--card); color:var(--fg); box-shadow:0 1px 2px rgba(24,24,27,.08), 0 0 0 1px var(--line); }
+.cmp textarea { width:100%; min-height:110px; resize:vertical; padding:12px 14px; border-radius:12px; border:1px solid var(--line2); background:var(--card); color:var(--fg); font:15px/1.5 var(--sans); outline:none; }
+.cmp textarea:focus { border-color:var(--fg); }
+.cmp-row { display:flex; align-items:center; gap:10px; margin-top:8px; }
+.count { margin-left:auto; font-size:12px; color:var(--faint); white-space:nowrap; }
+.tweaks { display:flex; flex-wrap:wrap; gap:6px; }
+.chipb { height:30px; padding:0 11px; border-radius:999px; box-shadow:inset 0 0 0 1px var(--line2); font-size:13px; display:inline-flex; align-items:center; gap:6px; }
+.chipb:hover { background:var(--glass2); }
+.chipb.on { background:var(--fg); color:#fff; box-shadow:none; }
+.chipb svg.i { width:14px; height:14px; }
+.whens { display:flex; flex-direction:column; gap:6px; }
+.when-o { display:grid; grid-template-columns:18px 1fr auto; gap:12px; align-items:center; padding:11px 14px; border-radius:12px; box-shadow:inset 0 0 0 1px var(--line); text-align:left; transition:box-shadow .15s; }
+.when-o:hover { box-shadow:inset 0 0 0 1px var(--line2); }
+.when-o .dot2 { width:16px; height:16px; border-radius:50%; box-shadow:inset 0 0 0 1.5px var(--line2); transition:box-shadow .15s; }
+.when-o.on { box-shadow:inset 0 0 0 1.5px var(--fg); }
+.when-o.on .dot2 { box-shadow:inset 0 0 0 5px var(--fg); }
+.when-o b { font-size:14px; font-weight:500; display:block; }
+.when-o small { display:block; font-size:12.5px; color:var(--muted); }
+.rec { font-size:11.5px; font-weight:500; color:var(--green); background:color-mix(in srgb, var(--green) 10%, var(--card)); padding:3px 8px; border-radius:6px; }
+.pv-wrap { position:sticky; top:16px; align-self:start; }
+.pv { border-radius:14px; box-shadow:0 0 0 1px var(--line); overflow:hidden; background:var(--card); }
+.pv-h { display:flex; align-items:center; gap:8px; padding:10px 12px; font-size:13px; }
+.pv img { width:100%; aspect-ratio:1 / 1; object-fit:cover; display:block; }
+.pv p { margin:0; padding:10px 12px 14px; font-size:13.5px; line-height:1.45; white-space:pre-wrap; }
+.pv p b { font-weight:600; margin-right:4px; }
+
 /* Tray */
 .tray { margin-top:6px; display:flex; flex-wrap:wrap; gap:8px; min-height:38px; align-items:center; }
 .tray-l { font-size:13px; color:var(--faint); margin-right:4px; }
@@ -252,7 +329,8 @@ h1 { margin:0; font-size:clamp(28px, 3vw, 40px); line-height:1.15; font-weight:6
 .chip button svg { width:14px; height:14px; }
 
 /* Bento */
-.bento { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.bento { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:16px; }
+.bento .tile.agents-t { grid-column:span 2; grid-row:span 2; }
 .tile { position:relative; grid-column:span 2; padding:20px; border-radius:16px; background:var(--card); box-shadow:0 0 0 1px var(--line); overflow:hidden; animation:rise .5s ease-out both; }
 .tile.half { grid-column:span 1; }
 .t-h { display:flex; align-items:center; gap:8px; margin-bottom:14px; font-size:13.5px; font-weight:600; }
@@ -335,8 +413,9 @@ h1 { margin:0; font-size:clamp(28px, 3vw, 40px); line-height:1.15; font-weight:6
 @keyframes drop { from { opacity:0; transform:translateY(-14px) scale(.98); } }
 @keyframes nudge { 0%, 100% { transform:none; } 30% { transform:translateX(18px) rotate(1.5deg); } 60% { transform:translateX(-6px); } }
 
-@media (max-width:1100px) { .grid { grid-template-columns:1fr; } .bento { grid-template-columns:1fr 1fr; } }
+@media (max-width:1100px) { .work { grid-template-columns:260px minmax(0, 1fr); } .cmp { grid-template-columns:1fr; } .pv-wrap { position:static; max-width:320px; } .bento { grid-template-columns:1fr 1fr; } .bento .tile.agents-t { grid-row:auto; } }
 @media (max-width:760px) {
+  .work { grid-template-columns:1fr; } .queue { position:static; } .pane { padding:20px; min-height:0; } .c-foot { flex-wrap:wrap; } .bento .tile { grid-column:1 / -1 !important; grid-row:auto !important; }
   .app { grid-template-columns:1fr; }
   .dock { position:fixed; top:auto; bottom:0; left:0; right:0; height:auto; z-index:50; padding:8px 12px calc(8px + env(safe-area-inset-bottom)); }
   .dock-inner { flex-direction:row; width:100%; justify-content:space-around; }
@@ -398,14 +477,14 @@ h1 { margin:0; font-size:clamp(28px, 3vw, 40px); line-height:1.15; font-weight:6
       </div>
     </section>
 
-    <div class="grid">
-      <div class="deck-wrap">
-        <div class="deck" id="deck" aria-live="polite"></div>
-        <div class="tray" id="tray"></div>
-      </div>
+    <div class="work">
+      <nav class="queue" id="queue" aria-label="Your day"></nav>
+      <section class="pane" id="pane" aria-live="polite"></section>
+    </div>
 
-      <aside class="bento" aria-label="Your agents and numbers">
-        <section class="tile" style="animation-delay:.05s">
+    <h2 class="sec-h">Around your day</h2>
+    <div class="bento" aria-label="Your agents and numbers">
+        <section class="tile agents-t" style="animation-delay:.05s">
           <div class="t-h"><span class="live"></span>Live from your agents<span class="muted">Nothing sent without you</span></div>
           <div class="agents"><div class="orb" aria-hidden="true"><span data-i="sparkles"></span></div><div><b id="savedBig">~35 min saved</b><span>Inbox, Publishing, Listening and Reports agents</span></div></div>
           <ul class="log" id="log"></ul>
@@ -432,7 +511,6 @@ h1 { margin:0; font-size:clamp(28px, 3vw, 40px); line-height:1.15; font-weight:6
           <div class="t-h"><span data-i="calendar"></span>This week<span class="muted">7 posts scheduled</span></div>
           <div class="wk" id="wk"></div>
         </section>
-      </aside>
     </div>
   </div>
 </div>
@@ -491,27 +569,26 @@ const plural = (n, a, b) => `${n} ${n === 1 ? a : b}`;
 /* ---------- Data ---------- */
 const DRAFTS = [["assets/post-atelier.jpg", "Behind the scenes at the workshop", "Reel · Julie"], ["assets/post-lamp.jpg", "Opale in white, close-up", "Image · Thomas"]];
 const ITEMS = {
-  inbox: { app: "Inbox", icon: "inbox", h: "#ff6a3d", need: true, meta: "5 profiles · since Friday", title: "42 new conversations, sorted for you",
+  inbox: { group: "you", short: "42 conversations sorted", app: "Inbox", icon: "inbox", h: "#ff6a3d", need: true, meta: "5 profiles · since Friday", title: "42 new conversations, sorted for you",
     why: "Your moderation agent did the triage. 30 can go in one click, 6 need your judgment.", primary: "Clear 30 in bulk", primaryIcon: "zap",
     done: () => inboxDoneText(), mins: 3 },
-  post: { app: "Publishing", icon: "send", h: "#f472b6", need: true, meta: "@maisonlumen · Instagram", title: "Thomas's post is waiting for your OK",
+  post: { group: "you", short: "Thomas's post to approve", app: "Publishing", icon: "send", h: "#f472b6", need: true, meta: "@maisonlumen · Instagram", title: "Thomas's post is waiting for your OK",
     why: "You approve everything on @maisonlumen. It goes out Thursday at 10:00.", primary: "Approve", primaryIcon: "check",
     secondary: ["Request changes", "This would open a note to Thomas"], done: "Post approved for Thursday 10:00", mins: 1 },
-  spike: { app: "Listening", icon: "radio", h: "#ff5d5d", meta: "Maison Lumen search", title: "Mentions jumped 310% overnight",
+  spike: { group: "look", short: "Mentions up 310%", app: "Listening", icon: "radio", h: "#ff5d5d", meta: "Maison Lumen search", title: "Mentions jumped 310% overnight",
     why: "One TikTok about the Opale lamp is driving it. Most people ask where to buy it.", primary: "Draft a post", primaryIcon: "pen",
     done: "Draft created from the mention spike", mins: 1 },
-  gap: { app: "Calendar", icon: "calendar", h: "#2dd4bf", meta: "Publishing · this week", title: "Wednesday is wide open",
+  gap: { group: "look", short: "Wednesday is empty", app: "Calendar", icon: "calendar", h: "#2dd4bf", meta: "Publishing · this week", title: "Wednesday is wide open",
     why: "Your Wednesday posts reach 18% more people than average. Two drafts are ready.", primary: "Schedule Wed 10:00", primaryIcon: "calendar",
     done: () => `Wednesday filled with “${DRAFTS[S.pick][1]}”`, mins: 1 },
-  kpi: { app: "Analytics", icon: "chart", h: "#34d399", meta: "Instagram · last 30 days", title: "Instagram engagement is up 12%",
+  kpi: { group: "good", short: "Instagram engagement +12%", app: "Analytics", icon: "chart", h: "#34d399", meta: "Instagram · last 30 days", title: "Instagram engagement is up 12%",
     why: "Reels drove 64% of it. Evening posts did twice as well as morning ones.", primary: "Add to report", primaryIcon: "layers",
     done: "Added to Monthly Instagram review", mins: 1 },
-  review: { app: "Reviews", icon: "star", h: "#fbbf24", meta: "Google · Lyon store · just now", title: "Nadia left a 5-star review",
+  review: { group: "good", short: "New 5-star review", app: "Reviews", icon: "star", h: "#fbbf24", meta: "Google · Lyon store · just now", title: "Nadia left a 5-star review",
     why: "Reviews answered within a day bring twice as many repeat visits.", primary: "Send thank-you", primaryIcon: "send",
     done: "Thanked Nadia for her review", mins: 1 },
 };
 const S = { order: ["inbox", "post", "spike", "gap", "kpi"], done: {}, doneOrder: [], inbox: {}, pick: 0, start: Date.now(), celebrated: false };
-const els = {};
 
 function body(id) {
   if (id === "inbox") return `
@@ -536,6 +613,7 @@ function body(id) {
   }
   if (id === "gap") return `
     <div class="week">${[["Mon", 2], ["Tue", 1], ["Wed", 0], ["Thu", 2], ["Fri", 1]].map(([d, n]) => `<div class="day${n ? "" : " gap"}"><b>${d}</b><span class="muted">${n ? plural(n, "post", "posts") : "Empty"}</span><div class="dots">${"<i></i>".repeat(n)}</div></div>`).join("")}</div>
+    ${S.done.spike ? "" : `<div class="conn">${ic("radio")}<span>Or post about the viral Opale video. Your agent can draft it from the mention spike.</span><button class="tbtn line" data-act="compose">Draft it</button></div>`}
     <div class="drafts">${DRAFTS.map(([src, t, m], i) => `<button class="draft${S.pick === i ? " sel" : ""}" data-pick="${i}" aria-pressed="${S.pick === i}"><img src="${src}" alt="" draggable="false"><span><b>${t}</b><small>${m}</small></span><span class="tick">${ic("check")}</span></button>`).join("")}</div>`;
   if (id === "kpi") return `
     <div class="stats3"><div class="stat"><small>Engagements</small><b>4,218</b><em>+12%</em></div><div class="stat"><small>Reach</small><b>38.6K</b><em>+8%</em></div><div class="stat"><small>Video views</small><b>12.9K</b><em>+21%</em></div></div>
@@ -551,25 +629,6 @@ function body(id) {
     <div class="bubble"><small>${ic("sparkles")}Suggested reply</small>Thank you Nadia! Julie will be thrilled. See you soon at the Lyon store.</div>`;
 }
 
-function makeCard(id) {
-  const it = ITEMS[id], el = document.createElement("article");
-  el.className = "card"; el.dataset.id = id; el.style.setProperty("--h", it.h);
-  el.setAttribute("aria-labelledby", `t-${id}`);
-  el.innerHTML = `
-    <span class="stamp yes">${esc(it.primary)}</span><span class="stamp no">Snooze</span>
-    <div class="c-head"><span class="app-chip">${ic(it.icon)}${it.app}</span><span class="c-meta">${it.meta}</span><span class="c-pos"></span></div>
-    <h2 class="c-title" id="t-${id}">${it.title}</h2>
-    <p class="c-why">${ic("sparkles")}<span>${it.why}</span></p>
-    <div class="c-body">${body(id)}</div>
-    <div class="c-foot">
-      <span class="c-hint"><span class="kbd">←</span><span class="kbd">→</span>or drag the card</span>
-      <button class="btn btn-g btn-round" data-act="snooze" aria-label="Snooze until tomorrow" title="Snooze until tomorrow (←)">${ic("clock")}</button>
-      ${it.secondary ? `<button class="btn btn-g" data-act="toast" data-msg="${esc(it.secondary[1])}">${it.secondary[0]}</button>` : ""}
-      <button class="btn btn-p" data-act="primary">${ic(it.primaryIcon)}${esc(it.primary)}</button>
-    </div>`;
-  attachDrag(el);
-  return el;
-}
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
 
@@ -649,10 +708,10 @@ function lanesHTML() {
   </div>`;
 }
 function refreshInbox() {
-  const card = els.inbox; if (!card) return;
-  card.querySelector(".lanes").outerHTML = lanesHTML();
-  const n = left("spam") + left("ready");
-  card.querySelector('[data-act="primary"]').innerHTML = `${ic("zap")}${n ? `Clear ${n} in bulk` : "Done with the inbox"}`;
+  renderQueue();
+  const p = $("pane"); if (p.dataset.id !== "inbox" || S.done.inbox) return;
+  const l = p.querySelector(".lanes"); if (l) l.outerHTML = lanesHTML();
+  const b = p.querySelector('[data-act="primary"]'); if (b) b.innerHTML = `${ic("zap")}${esc(primaryLabel("inbox"))}`;
 }
 function bulk(k) {
   if (k === "spam") IB.spam.forEach((_, i) => { if (!S.ib.spam[i]) S.ib.spam[i] = "hide"; });
@@ -740,114 +799,148 @@ function ibClick(b) {
 }
 $("scrim").addEventListener("click", closeDrawer);
 
-/* ---------- Deck layout ---------- */
+/* ---------- Day list + detail ---------- */
+const GROUPS = [["you", "Needs you"], ["look", "Worth a look"], ["good", "Good news"]];
 const visible = () => S.order.filter((id) => !S.done[id]);
-const stackT = (i) => `translate3d(0, ${i * 22}px, ${-i * 60}px) scale(${1 - i * 0.05})`;
-function layout() {
-  const deck = $("deck"), vis = visible();
-  Object.keys(els).forEach((id) => { if (!vis.includes(id)) { els[id].remove(); delete els[id]; } });
-  deck.querySelector(".sky")?.remove();
-  vis.forEach((id, i) => {
-    let el = els[id], fresh = false;
-    if (!el) { el = els[id] = makeCard(id); fresh = true; deck.append(el); }
-    el.style.zIndex = 100 - i;
-    el.classList.toggle("is-top", i === 0);
-    el.inert = i !== 0;
-    el.querySelector(".c-pos").textContent = `${S.order.indexOf(id) + 1 - countDoneBefore(id)} of ${vis.length}`;
-    const target = stackT(i), op = i > 2 ? 0 : 1, br = `brightness(${1 - i * 0.18})`;
-    if (fresh && !REDUCED) {
-      el.style.transition = "none"; el.style.opacity = 0; el.style.transform = `${target} translateY(${i === 0 ? -60 : 50}px) scale(.94)`;
-      void el.offsetWidth; el.style.transition = "";
-    }
-    el.style.transform = target; el.style.opacity = op; el.style.filter = "";
-  });
-  if (!vis.length) showSky();
+const queueOrder = () => GROUPS.flatMap(([g]) => S.order.filter((id) => ITEMS[id].group === g));
+S.sel = "inbox"; S.cmp = null; S.flash = null;
+function nextAfter(id) { const o = queueOrder(), i = o.indexOf(id); return [...o.slice(i + 1), ...o.slice(0, Math.max(0, i))].find((x) => !S.done[x] && x !== id) || null; }
+function primaryLabel(id) { if (id !== "inbox") return ITEMS[id].primary; const n = left("spam") + left("ready"); return n ? `Clear ${n} in bulk` : "Done with the inbox"; }
+
+function qRow(id) {
+  const it = ITEMS[id], d = S.done[id], st = d ? (d.kind === "snooze" ? " later" : " done") : "";
+  const meta = d ? (d.kind === "snooze" ? "Back tomorrow 9:00" : d.text) : it.meta;
+  return `<button class="q-row${S.sel === id ? " sel" : ""}${st}${S.flash === id ? " flash" : ""}" data-sel="${id}" style="--h:${it.h}" aria-current="${S.sel === id}">
+    <span class="q-ico">${ic(d ? (d.kind === "snooze" ? "clock" : "check") : it.icon)}</span>
+    <span style="min-width:0"><span class="q-t">${it.short}</span><span class="q-m">${esc(meta)}</span></span>
+    <span class="q-time">${d ? "" : `~${it.mins} min`}</span></button>`;
 }
-function countDoneBefore(id) { const idx = S.order.indexOf(id); return S.order.slice(0, idx).filter((x) => S.done[x]).length; }
+function renderQueue() {
+  const total = S.order.length, doneN = total - visible().length;
+  let h = `<div class="q-head"><div class="q-top"><b>Your day</b><span>${doneN} of ${total} done</span></div><div class="q-bar"><i style="width:${doneN / total * 100}%"></i></div></div>`;
+  for (const [g, l] of GROUPS) {
+    const ids = S.order.filter((id) => ITEMS[id].group === g && !S.done[id]); if (!ids.length) continue;
+    h += `<div class="q-group"><span>${l}</span><span>${ids.length}</span></div>` + ids.map(qRow).join("");
+  }
+  const later = S.doneOrder.filter((id) => S.done[id].kind === "snooze"), done = S.doneOrder.filter((id) => S.done[id].kind !== "snooze");
+  if (later.length) h += `<div class="q-group"><span>Later</span><span>${later.length}</span></div>` + later.map(qRow).join("");
+  if (done.length) h += `<div class="q-group"><span>Done</span><span>${done.length}</span></div>` + done.map(qRow).join("");
+  h += `<div class="q-foot"><span class="kbd">↑</span><span class="kbd">↓</span> to move between items</div>`;
+  $("queue").innerHTML = h;
+}
+function renderPane(anim = true) {
+  const p = $("pane"), id = S.sel;
+  p.classList.remove("swap"); if (anim && !REDUCED) { void p.offsetWidth; p.classList.add("swap"); }
+  p.dataset.id = id || "";
+  if (!id) { p.innerHTML = skyHTML(); return; }
+  const it = ITEMS[id], d = S.done[id]; p.style.setProperty("--h", it.h);
+  if (id === "spike" && S.cmp && !d) { p.innerHTML = composerHTML(); return; }
+  const order = queueOrder().filter((x) => !S.done[x]), pos = order.indexOf(id);
+  p.innerHTML = `
+    <div class="c-head"><span class="app-chip">${ic(it.icon)}${it.app}</span><span class="c-meta">${it.meta}</span><span class="c-pos">${d ? "" : `${pos + 1} of ${order.length}`}</span></div>
+    <h2 class="c-title">${it.title}</h2>
+    ${d ? `<div class="state-box ${d.kind}">${ic(d.kind === "snooze" ? "clock" : "check")}<span>${esc(d.kind === "snooze" ? "Snoozed. It comes back tomorrow at 9:00." : d.text)}</span><button class="tbtn line" data-undo="${id}">Undo</button>${visible().length ? `<button class="tbtn solid" data-act="next">Next item ${ic("right")}</button>` : ""}</div>`
+        : `<p class="c-why">${ic("sparkles")}<span>${it.why}</span></p>`}
+    <div class="c-body${d ? " dim" : ""}">${body(id)}</div>
+    ${d ? "" : `<div class="c-foot"><span class="c-hint">Nothing goes out until you confirm</span>
+      <button class="btn btn-g" data-act="snooze">${ic("clock")}Snooze to tomorrow 9:00</button>
+      ${it.secondary ? `<button class="btn btn-g" data-act="toast" data-msg="${esc(it.secondary[1])}">${it.secondary[0]}</button>` : ""}
+      <button class="btn btn-p" data-act="primary">${ic(it.primaryIcon)}${esc(primaryLabel(id))}</button></div>`}`;
+}
+function skyHTML() {
+  const secs = Math.round((Date.now() - S.start) / 1000), m = Math.floor(secs / 60), s = secs % 60;
+  const handled = S.doneOrder.filter((id) => S.done[id].kind === "primary").length;
+  return `<div class="sky"><div class="done-mark" aria-hidden="true">${ic("check")}</div><h2>All clear</h2>
+    <p>Nothing needs you right now. We'll tap you when something does.</p>
+    <div class="stats3"><div class="stat"><small>Handled</small><b>${handled}</b></div><div class="stat"><small>Your time</small><b>${m ? `${m}m ` : ""}${s}s</b></div><div class="stat"><small>Agents saved</small><b>~35 min</b></div></div>
+    <button class="btn btn-g" data-act="replay" style="margin-top:8px">${ic("undo")}Replay the demo</button></div>`;
+}
+function select(id) { if (!id || id === S.sel) return; S.sel = id; renderQueue(); renderPane(); }
+
+/* ---------- Draft a post ---------- */
+const ANGLES = [
+  { name: "Where to buy", text: "You've been asking where to find the Opale lamp. It's in all our stores and online, in white and brass.", short: "The Opale is in stock, in store and online." },
+  { name: "The viral video", text: "Thank you @deco.lou for the love! The Opale lamp from the video is in stock, online and in our stores.", short: "Thanks @deco.lou! The Opale is in stock." },
+  { name: "Store invite", text: "Come see the Opale in person this week. Our Lyon and Paris stores are open Tuesday to Saturday, 10:00 to 19:00.", short: "See the Opale in store this week." },
+];
+const WHENS = [["wed", "Wednesday 10:00", "Fills your empty Wednesday. Wednesday posts reach 18% more people.", true], ["eve", "Today 18:00", "While it's hot. Your evening posts do twice as well."], ["draft", "Keep as a draft", "Decide later. It waits in Publishing."]];
+const NETNAME = { IG: "Instagram", FB: "Facebook", TT: "TikTok", LI: "LinkedIn" };
+const cmpFresh = () => ({ angle: 0, text: ANGLES[0].text, nets: { IG: true, FB: true, TT: false, LI: false }, when: "wed" });
+function openCompose() { S.cmp = S.cmp || cmpFresh(); S.sel = "spike"; renderQueue(); renderPane(); setTimeout(() => $("cmpText")?.focus(), 60); }
+function cmpPrimary() { return S.cmp.when === "wed" ? "Schedule for Wed 10:00" : S.cmp.when === "eve" ? "Schedule for today 18:00" : "Save draft"; }
+function composerHTML() {
+  const c = S.cmp, nets = Object.entries(c.nets), first = nets.find(([, o]) => o)?.[0] || "IG";
+  return `<div class="c-head"><span class="app-chip" style="--h:#db2777">${ic("pen")}New post</span><span class="c-meta">From the mention spike in Listening</span><span class="c-pos"></span></div>
+  <h2 class="c-title">Draft a post about the Opale</h2>
+  <div class="ctx"><span class="ctx-l">Built from</span><span>${netB("TT")}<b>@deco.lou</b> video, 48K views</span><span>${ic("inbox")}<b>23</b> “where to buy?” questions</span><span>${ic("layers")}<b>Opale photo</b> from your library</span></div>
+  <div class="cmp"><div class="cmp-l">
+    <div><span class="lbl">Angle</span><div class="seg2" role="tablist" aria-label="Angle">${ANGLES.map((a, i) => `<button class="${i === c.angle ? "on" : ""}" data-cmp="angle" data-v="${i}" role="tab" aria-selected="${i === c.angle}">${a.name}</button>`).join("")}</div></div>
+    <div><label class="lbl" for="cmpText">Caption</label><textarea id="cmpText">${esc(c.text)}</textarea>
+      <div class="cmp-row"><div class="tweaks"><button class="chipb" data-cmp="short">Shorter</button><button class="chipb" data-cmp="link">Add the shop link</button><button class="chipb" data-cmp="ask">Ask a question</button><button class="chipb" data-cmp="reset">${ic("undo")}Reset</button></div><span class="count" id="cmpCount">${c.text.length} / 2,200</span></div></div>
+    <div><span class="lbl">Post on</span><div class="tweaks">${nets.map(([n, on]) => `<button class="chipb${on ? " on" : ""}" data-cmp="net" data-v="${n}" aria-pressed="${on}">${on ? ic("check") : ""}${NETNAME[n]}</button>`).join("")}</div></div>
+    <div><span class="lbl">When</span><div class="whens">${WHENS.map(([k, t, sub, rec]) => `<button class="when-o${c.when === k ? " on" : ""}" data-cmp="when" data-v="${k}" aria-pressed="${c.when === k}"><span class="dot2"></span><span><b>${t}</b><small>${sub}</small></span>${rec ? `<span class="rec">Suggested</span>` : ""}</button>`).join("")}</div></div>
+  </div>
+  <div class="pv-wrap"><span class="lbl">Preview on ${NETNAME[first]}</span><div class="pv"><div class="pv-h">${netB(first)}<b>maisonlumen</b></div><img src="assets/post-lamp.jpg" alt="Opale lamp" draggable="false"><p><b>maisonlumen</b><span id="pvText">${esc(c.text)}</span></p></div></div></div>
+  <div class="c-foot"><button class="btn btn-g" data-cmp="cancel">${ic("left")}Back to the spike</button><span class="c-hint" style="margin-left:auto;margin-right:0">${c.when === "wed" ? "This also fills your empty Wednesday" : ""}</span><button class="btn btn-p" data-cmp="go">${ic(c.when === "draft" ? "pen" : "calendar")}${cmpPrimary()}</button></div>`;
+}
+function cmpClick(b) {
+  const a = b.dataset.cmp, v = b.dataset.v, c = S.cmp; if (!c) return;
+  if (a === "angle") { c.angle = +v; c.text = ANGLES[c.angle].text; }
+  if (a === "short") c.text = ANGLES[c.angle].short;
+  if (a === "link" && !c.text.includes("maisonlumen.com")) c.text = `${c.text.trim()} Shop it: maisonlumen.com/opale`;
+  if (a === "ask" && !c.text.includes("which one")) c.text = `${c.text.trim()} White or brass, which one would you pick?`;
+  if (a === "reset") c.text = ANGLES[c.angle].text;
+  if (a === "net") { c.nets[v] = !c.nets[v]; if (!Object.values(c.nets).some(Boolean)) c.nets[v] = true; }
+  if (a === "when") c.when = v;
+  if (a === "cancel") { S.cmp = null; return renderPane(); }
+  if (a === "go") return publishDraft();
+  renderPane(false);
+}
+function publishDraft() {
+  const c = S.cmp, nets = Object.entries(c.nets).filter(([, o]) => o).map(([n]) => NETNAME[n]).join(" and ");
+  S.cmp = null;
+  if (c.when === "draft") return act("spike", "primary", { text: "Opale post saved as a draft in Publishing" });
+  const when = c.when === "wed" ? "Wednesday 10:00" : "today 18:00", extra = { text: `Opale post scheduled for ${when} on ${nets}` };
+  if (c.when === "wed" && !S.done.gap) { extra.linked = "gap"; extra.also = { id: "gap", text: "Filled by your Opale post, Wednesday 10:00" }; }
+  act("spike", "primary", extra);
+}
+document.addEventListener("input", (e) => {
+  if (e.target.id !== "cmpText" || !S.cmp) return;
+  S.cmp.text = e.target.value; $("pvText").textContent = e.target.value; $("cmpCount").textContent = `${e.target.value.length} / 2,200`;
+});
 
 /* ---------- Actions ---------- */
-function act(id, kind) {
+function act(id, kind, extra) {
   if (!id || S.done[id]) return;
   const it = ITEMS[id];
   if (kind === "primary" && id === "inbox") { bulk("spam"); bulk("ready"); }
-  const text = kind === "snooze" ? `${it.app}: snoozed until tomorrow` : (typeof it.done === "function" ? it.done() : it.done);
-  S.done[id] = { text, kind }; S.doneOrder.push(id);
-  const el = els[id]; delete els[id];
-  if (el) {
-    const dir = kind === "snooze" ? -1 : 1;
-    el.classList.remove("dragging"); el.classList.add("fly"); el.inert = true;
-    el.style.transform = `translate3d(${dir * 130}%, ${-40}px, 0) rotate(${dir * 22}deg)`; el.style.opacity = 0;
-    setTimeout(() => el.remove(), 520);
-  }
+  const text = extra?.text || (kind === "snooze" ? `${it.short} · snoozed` : (typeof it.done === "function" ? it.done() : it.done));
+  S.done[id] = { text, kind, linked: extra?.linked }; S.doneOrder.push(id);
+  if (extra?.also) { S.done[extra.also.id] = { text: extra.also.text, kind: "primary", linked: id }; S.doneOrder.push(extra.also.id); }
+  S.flash = id;
+  if (S.sel === id) S.sel = nextAfter(id);
   update();
-  island(kind === "snooze" ? "Snoozed until tomorrow 9:00" : text, () => undo(id), kind === "snooze" ? "sn" : "ok");
+  island(kind === "snooze" ? "Snoozed to tomorrow 9:00" : text + (extra?.also ? ". It also filled your empty Wednesday" : ""), () => undo(id), kind === "snooze" ? "sn" : "ok");
 }
 function undo(id) {
-  if (!S.done[id]) return;
-  delete S.done[id]; S.doneOrder = S.doneOrder.filter((x) => x !== id);
-  if (id === "inbox") S.ib = ibFresh();
-  S.order = [id, ...S.order.filter((x) => x !== id)];
-  update();
+  const d = S.done[id]; if (!d) return;
+  [id, d.linked].filter(Boolean).forEach((x) => { delete S.done[x]; S.doneOrder = S.doneOrder.filter((y) => y !== x); if (x === "inbox") S.ib = ibFresh(); });
+  S.sel = id; update();
 }
-function update() {
-  layout(); hero(); tray(); week();
-}
+function update() { renderQueue(); renderPane(); hero(); week(); S.flash = null; }
 function hero() {
   const vis = visible(), total = S.order.length, doneN = total - vis.length;
   const need = vis.filter((id) => ITEMS[id].need).length, look = vis.length - need;
   const mins = vis.reduce((m, id) => m + ITEMS[id].mins, 0);
   const h = new Date().getHours(), g = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
   $("hello").innerHTML = vis.length ? `${g}, Camille.<br><span class="serif grad">${need ? `${plural(need, "decision", "decisions")}${look ? ` and ${plural(look, "quick look", "quick looks")}` : ""}.` : `${plural(look, "quick look", "quick looks")}, nothing urgent.`}</span>` : `You're all set, Camille.<br><span class="serif grad">Nothing needs you right now.</span>`;
-  $("heroSub").textContent = vis.length ? `About ${mins} ${mins === 1 ? "minute" : "minutes"}. Swipe right to act, left to snooze. Your agents handle the rest.` : "Your agents keep watching the Inbox, the calendar and your mentions. New items land here.";
+  $("heroSub").textContent = vis.length ? `About ${mins} ${mins === 1 ? "minute" : "minutes"}. Go top to bottom or pick any item. Your agents handle the rest.` : "Your agents keep watching the Inbox, the calendar and your mentions. New items land here.";
   $("ringNum").textContent = `${doneN}/${total}`;
   $("ringVal").style.strokeDashoffset = 314.16 * (1 - doneN / total);
-}
-function tray() {
-  const t = $("tray");
-  if (!S.doneOrder.length) { t.innerHTML = ""; return; }
-  t.innerHTML = `<span class="tray-l">Done today</span>` + S.doneOrder.map((id) => `<span class="chip"><span class="ck${S.done[id].kind === "snooze" ? " sn" : ""}">${ic(S.done[id].kind === "snooze" ? "clock" : "check")}</span>${esc(S.done[id].text)}<button data-undo="${id}" aria-label="Undo" title="Undo">${ic("undo")}</button></span>`).join("");
 }
 function week() {
   const filled = S.done.gap && S.done.gap.kind === "primary";
   $("wk").innerHTML = [["Mon", 2], ["Tue", 1], ["Wed", filled ? 1 : 0], ["Thu", 2], ["Fri", 1]].map(([d, n]) => `<div class="${d === "Wed" ? (filled ? "fill" : "gap") : ""}"><b>${n || "·"}</b>${d}</div>`).join("");
-}
-
-/* ---------- Clear sky ---------- */
-function showSky() {
-  const deck = $("deck"); if (deck.querySelector(".sky")) return;
-  const secs = Math.round((Date.now() - S.start) / 1000), m = Math.floor(secs / 60), s = secs % 60;
-  const handled = S.doneOrder.filter((id) => S.done[id].kind === "primary").length;
-  const sky = document.createElement("div"); sky.className = "sky";
-  sky.innerHTML = `<div class="done-mark" aria-hidden="true">${ic("check")}</div><h2>All clear</h2>
-    <p>Nothing needs you right now. We'll tap you when something does.</p>
-    <div class="stats3"><div class="stat"><small>Handled</small><b>${handled}</b></div><div class="stat"><small>Your time</small><b>${m ? `${m}m ` : ""}${s}s</b></div><div class="stat"><small>Agents saved</small><b>~35 min</b></div></div>
-    <button class="btn btn-g" data-act="replay" style="margin-top:8px">${ic("undo")}Replay the demo</button>`;
-  deck.append(sky);
-  S.celebrated = true;
-}
-
-/* ---------- Drag / swipe ---------- */
-function attachDrag(el) {
-  let sx = 0, sy = 0, dx = 0, dy = 0, on = false, id = null;
-  const yes = () => el.querySelector(".stamp.yes"), no = () => el.querySelector(".stamp.no");
-  el.addEventListener("pointerdown", (e) => {
-    if (!el.classList.contains("is-top") || e.button !== 0 || e.target.closest("button, a, input, label")) return;
-    on = true; id = e.pointerId; sx = e.clientX; sy = e.clientY; dx = dy = 0;
-    el.setPointerCapture(id); el.classList.add("dragging");
-  });
-  el.addEventListener("pointermove", (e) => {
-    if (!on) return;
-    dx = e.clientX - sx; dy = e.clientY - sy;
-    el.style.transform = `translate3d(${dx}px, ${dy * 0.25}px, 0) rotate(${dx / 16}deg)`;
-    yes().style.opacity = Math.max(0, Math.min(1, dx / 110)); no().style.opacity = Math.max(0, Math.min(1, -dx / 110));
-  });
-  const end = () => {
-    if (!on) return; on = false; el.classList.remove("dragging");
-    yes().style.opacity = no().style.opacity = 0;
-    if (Math.abs(dx) > 120) act(el.dataset.id, dx > 0 ? "primary" : "snooze");
-    else el.style.transform = stackT(0);
-  };
-  el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end);
 }
 
 /* ---------- Island toast ---------- */
@@ -886,7 +979,7 @@ setTimeout(nextLog, 4000);
 function arrive() {
   if (S.order.includes("review")) return;
   S.order.push("review"); S.celebrated = false;
-  update();
+  if (!S.sel) { S.sel = "review"; update(); } else { renderQueue(); hero(); }
   island("New from your agents: Nadia left a 5-star review", null, "info");
 }
 
@@ -894,12 +987,12 @@ function arrive() {
 let palItems = [], palIdx = 0;
 function commands() {
   const vis = visible(), list = [];
-  vis.forEach((id) => { const it = ITEMS[id]; list.push({ sec: "Act on your day", icon: it.primaryIcon, h: it.h, label: `${it.primary}`, hint: it.title, run: () => act(id, "primary") }); });
+  vis.forEach((id) => { const it = ITEMS[id]; list.push({ sec: "Act on your day", icon: it.primaryIcon, h: it.h, label: `${it.primary}`, hint: it.title, run: () => (id === "spike" ? openCompose() : act(id, "primary")) }); });
   vis.forEach((id) => { const it = ITEMS[id]; list.push({ sec: "Act on your day", icon: "clock", h: "#fbbf24", label: `Snooze: ${it.title}`, hint: "Until tomorrow", run: () => act(id, "snooze") }); });
   if (vis.length > 1) list.push({ sec: "Act on your day", icon: "clock", h: "#fbbf24", label: "Snooze everything until tomorrow", hint: plural(vis.length, "item", "items"), run: () => vis.forEach((id, i) => setTimeout(() => act(id, "snooze"), i * 140)) });
   if (!S.done.inbox) list.push({ sec: "Act on your day", icon: "inbox", h: "#ff6a3d", label: "Review inbox items one by one", hint: "Spam, replies, your call", run: () => openDrawer("spam") });
   list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "What happened over the weekend?", hint: "Archie", run: () => island("Archie would answer here, in the side panel", null, "info") });
-  list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "Write a post about the Opale lamp", hint: "Archie", run: () => island("Archie would open with a draft ready", null, "info") });
+  list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "Write a post about the Opale lamp", hint: "From the mention spike", run: openCompose });
   list.push({ sec: "Go to", icon: "inbox", label: "Inbox", hint: "G then I", run: () => island("Inbox isn't part of this prototype", null, "info") });
   list.push({ sec: "Go to", icon: "calendar", label: "Publishing calendar", hint: "G then C", run: () => island("Calendar isn't part of this prototype", null, "info") });
   list.push({ sec: "Go to", icon: "layers", label: "Classic Today view", hint: "Design system version", run: () => (location.href = "index.html") });
@@ -935,8 +1028,7 @@ $("cmdBtn").addEventListener("click", openPal);
 
 /* ---------- Misc ---------- */
 function replay() {
-  Object.values(els).forEach((e) => e.remove()); Object.keys(els).forEach((k) => delete els[k]);
-  S.order = ["inbox", "post", "spike", "gap", "kpi"]; S.done = {}; S.doneOrder = []; S.ib = ibFresh(); S.pick = 0; S.start = Date.now(); S.celebrated = false;
+  S.order = ["inbox", "post", "spike", "gap", "kpi"]; S.done = {}; S.doneOrder = []; S.ib = ibFresh(); S.pick = 0; S.start = Date.now(); S.celebrated = false; S.cmp = null; S.sel = "inbox";
   update();
 }
 function countUp(el) {
@@ -948,7 +1040,7 @@ function confetti() {
   if (REDUCED) return;
   const c = $("confetti"), ctx = c.getContext("2d"), cols = ["#ff6a3d", "#ff9b62", "#f472b6", "#8b7bff", "#2dd4bf", "#fbbf24"];
   c.width = innerWidth; c.height = innerHeight; c.hidden = false;
-  const r = $("deck").getBoundingClientRect(), ox = r.left + r.width / 2, oy = r.top + 140;
+  const r = $("pane").getBoundingClientRect(), ox = r.left + r.width / 2, oy = r.top + 140;
   const bits = Array.from({ length: 180 }, () => ({ x: ox, y: oy, vx: (Math.random() - .5) * 18, vy: -Math.random() * 15 - 4, s: Math.random() * 7 + 4, a: Math.random() * 6, va: (Math.random() - .5) * .35, c: cols[Math.random() * cols.length | 0], round: Math.random() > .6 }));
   const t0 = performance.now();
   (function frame(t) {
@@ -964,9 +1056,13 @@ document.addEventListener("click", (e) => {
   const ibb = e.target.closest("[data-ib]"); if (ibb) return ibClick(ibb);
   const pk = e.target.closest("[data-pick]");
   if (pk) { S.pick = +pk.dataset.pick; pk.closest(".drafts").querySelectorAll(".draft").forEach((d, i) => { d.classList.toggle("sel", i === S.pick); d.setAttribute("aria-pressed", i === S.pick); }); return; }
+  const sl = e.target.closest("[data-sel]"); if (sl) return select(sl.dataset.sel);
+  const cm = e.target.closest("[data-cmp]"); if (cm) return cmpClick(cm);
   const b = e.target.closest("[data-act]"); if (!b) return;
-  const id = b.closest(".card")?.dataset.id;
-  if (b.dataset.act === "primary") act(id, "primary");
+  const id = $("pane").dataset.id;
+  if (b.dataset.act === "primary") id === "spike" ? openCompose() : act(id, "primary");
+  if (b.dataset.act === "compose") openCompose();
+  if (b.dataset.act === "next") select(nextAfter(id));
   if (b.dataset.act === "snooze") act(id, "snooze");
   if (b.dataset.act === "toast") island(b.dataset.msg, null, "info");
   if (b.dataset.act === "replay") replay();
@@ -976,10 +1072,13 @@ document.addEventListener("keydown", (e) => {
   if ($("pal").classList.contains("open")) { if (e.key === "Escape") closePal(); return; }
   if ($("drawer").classList.contains("open")) { if (e.key === "Escape") { if (S.ib.edit) { S.ib.edit = null; renderDrawer(); } else closeDrawer(); } return; }
   if (e.target.closest?.("input, textarea") || e.metaKey || e.ctrlKey || e.altKey) return;
-  const top = visible()[0];
   if (e.key === "/") { e.preventDefault(); openPal(); }
-  if (e.key === "ArrowRight" && top) { e.preventDefault(); act(top, "primary"); }
-  if (e.key === "ArrowLeft" && top) { e.preventDefault(); act(top, "snooze"); }
+  if (["ArrowDown", "ArrowUp", "j", "k"].includes(e.key)) {
+    const rows = [...document.querySelectorAll("#queue [data-sel]")].map((x) => x.dataset.sel); if (!rows.length) return;
+    e.preventDefault(); const i = rows.indexOf(S.sel), dn = e.key === "ArrowDown" || e.key === "j";
+    select(rows[i < 0 ? 0 : Math.max(0, Math.min(rows.length - 1, i + (dn ? 1 : -1)))]);
+    document.querySelector("#queue .q-row.sel")?.focus({ preventScroll: true });
+  }
 });
 document.addEventListener("pointermove", (e) => {
   const t = e.target.closest?.(".tile"); if (!t) return;
@@ -990,8 +1089,6 @@ document.addEventListener("pointermove", (e) => {
 hydrateIcons();
 update();
 document.querySelectorAll("[data-count]").forEach(countUp);
-// A small nudge on the top card to show it can be swiped
-setTimeout(() => { const el = els[visible()[0]]; if (el && !REDUCED && !el.classList.contains("dragging")) { el.style.animation = "nudge .9s ease-in-out"; el.addEventListener("animationend", () => (el.style.animation = ""), { once: true }); } }, 1600);
 </script>
 </body>
 </html>

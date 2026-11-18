@@ -9,3 +9,8 @@ A clickable prototype of an action-oriented **Today** page in Agorapulse, and of
 - `surfaces.html`: one action item on three surfaces, and the data model they share.
 
 Built with the Agorapulse design system (`@agorapulse/ui-theme` 22.0.7 and `@agorapulse/ui-symbol` 22.0.0 from jsDelivr). Demo data only (Maison Lumen is a fictional brand). The "Today" rail item is the proposal; it isn't in the product.
+
+
+## Exploration: Today, reimagined (`next.html`)
+
+A second take that leaves the design system aside to explore a more expressive look: dark ambient background (light mode too), a card deck you swipe right to act and left to snooze (or ← →), a ⌘K command bar, a live agent feed that types in new activity, a bento of numbers, a progress ring, and a Clear sky end state. Live: https://audreyalexandre3.github.io/today-proto/next.html

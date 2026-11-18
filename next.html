@@ -318,6 +318,30 @@ span.chipb, span.chipb:hover { background:var(--card2); box-shadow:none; color:v
 .pv p { margin:0; padding:10px 12px 14px; font-size:13.5px; line-height:1.45; white-space:pre-wrap; }
 .pv p b { font-weight:600; margin-right:4px; }
 
+
+/* Adapt for TikTok */
+.adapt { display:grid; grid-template-columns:minmax(0, 1fr) 250px; gap:28px; flex:1; }
+.covers { display:flex; gap:8px; }
+.cov { width:54px; aspect-ratio:9 / 16; border-radius:8px; overflow:hidden; box-shadow:inset 0 0 0 1px var(--line); padding:0; }
+.cov img { width:100%; height:100%; object-fit:cover; display:block; }
+.cov.on { outline:2px solid var(--fg); outline-offset:2px; }
+.phone { position:relative; width:250px; aspect-ratio:9 / 16; border-radius:30px; overflow:hidden; background:#000; box-shadow:0 0 0 6px #18181b, 0 24px 48px -20px rgba(24,24,27,.45); }
+.phone img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:object-position .35s ease; }
+.phone::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.25), transparent 18%, transparent 55%, rgba(0,0,0,.65)); }
+.tt-top { position:absolute; top:14px; left:0; right:0; z-index:1; text-align:center; color:#fff; font-size:12px; font-weight:600; opacity:.9; }
+.tt-cap { position:absolute; left:12px; right:58px; bottom:16px; z-index:1; color:#fff; font-size:12px; line-height:1.4; }
+.tt-cap b { display:block; font-size:13px; margin-bottom:3px; }
+.tt-cap p { margin:0; white-space:pre-wrap; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+.tt-snd { margin-top:6px; font-size:11.5px; opacity:.9; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tt-rail { position:absolute; right:10px; bottom:70px; z-index:1; display:flex; flex-direction:column; gap:14px; align-items:center; color:#fff; font-size:10.5px; font-weight:600; }
+.tt-rail span { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.tt-rail i { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.22); display:grid; place-items:center; font-style:normal; font-size:14px; }
+.tt-rail .av { width:36px; height:36px; border-radius:50%; background:#fff; color:#18181b; display:grid; place-items:center; font-size:12px; font-weight:700; }
+.changed { display:flex; flex-wrap:wrap; gap:6px; }
+.changed span { display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 10px; border-radius:8px; background:color-mix(in srgb, var(--green) 8%, var(--card)); color:var(--fg); font-size:12.5px; }
+.changed svg.i { width:14px; height:14px; color:var(--green); }
+@media (max-width:1100px) { .adapt { grid-template-columns:1fr; } }
+
 /* Tray */
 .tray { margin-top:6px; display:flex; flex-wrap:wrap; gap:8px; min-height:38px; align-items:center; }
 .tray-l { font-size:13px; color:var(--faint); margin-right:4px; }
@@ -587,7 +611,7 @@ const ITEMS = {
     done: "Added to Monthly Instagram review", mins: 1 },
   top: { group: "good", short: "Top post: workshop Reel", app: "Analytics", icon: "trending", h: "#7c6cf0", meta: "Instagram · posted Thursday 18:30", title: "Your workshop Reel did 3× your average",
     why: "Behind-the-scenes Reels are your best format this month. People save them to come back to.", primary: "Make a similar post", primaryIcon: "pen",
-    alt: ["Reuse it on TikTok", "Workshop Reel reused on TikTok, goes out tomorrow 18:30"], done: "Similar post created", mins: 2 },
+    alt: ["Adapt for TikTok"], done: "Similar post created", mins: 2 },
   review: { group: "good", short: "New 5-star review", app: "Reviews", icon: "star", h: "#fbbf24", meta: "Google · Lyon store · just now", title: "Nadia left a 5-star review",
     why: "Reviews answered within a day bring twice as many repeat visits.", primary: "Send thank-you", primaryIcon: "send",
     done: "Thanked Nadia for her review", mins: 1 },
@@ -845,6 +869,7 @@ function renderPane(anim = true) {
   if (!id) { p.innerHTML = skyHTML(); return; }
   const it = ITEMS[id], d = S.done[id]; p.style.setProperty("--h", it.h);
   if (S.cmp && S.cmp.src === id && !d) { p.innerHTML = composerHTML(); return; }
+  if (S.adapt && id === "top" && !d) { p.innerHTML = adaptHTML(); return; }
   const order = queueOrder().filter((x) => !S.done[x]), pos = order.indexOf(id);
   p.innerHTML = `
     <div class="c-head"><span class="app-chip">${ic(it.icon)}${it.app}</span><span class="c-meta">${it.meta}</span><span class="c-pos">${d ? "" : `${pos + 1} of ${order.length}`}</span></div>
@@ -889,7 +914,7 @@ const COMPOSE = Object.keys(SRC);
 const WHENS = [["wed", "Wednesday 10:00", "Fills your empty Wednesday. Wednesday posts reach 18% more people.", true], ["eve", "Today 18:00", "Your evening posts do twice as well."], ["draft", "Keep as a draft", "Decide later. It waits in Publishing."]];
 const NETNAME = { IG: "Instagram", FB: "Facebook", TT: "TikTok", LI: "LinkedIn" };
 const cmpFresh = (src) => ({ src, angle: 0, text: SRC[src].angles[0].text, nets: src === "top" ? { IG: true, FB: false, TT: true, LI: false } : { IG: true, FB: true, TT: false, LI: false }, when: S.done.gap ? "eve" : "wed" });
-function openCompose(src = "spike") { if (!S.cmp || S.cmp.src !== src) S.cmp = cmpFresh(src); S.sel = src; renderQueue(); renderPane(); setTimeout(() => $("cmpText")?.focus(), 60); }
+function openCompose(src = "spike") { if (src === "top") S.adapt = null; if (!S.cmp || S.cmp.src !== src) S.cmp = cmpFresh(src); S.sel = src; renderQueue(); renderPane(); setTimeout(() => $("cmpText")?.focus(), 60); }
 function cmpPrimary() { return S.cmp.when === "wed" ? "Schedule for Wed 10:00" : S.cmp.when === "eve" ? "Schedule for today 18:00" : "Save draft"; }
 function composerHTML() {
   const c = S.cmp, cf = SRC[c.src], nets = Object.entries(c.nets), first = nets.find(([, o]) => o)?.[0] || "IG";
@@ -933,6 +958,58 @@ function publishDraft() {
 document.addEventListener("input", (e) => {
   if (e.target.id !== "cmpText" || !S.cmp) return;
   S.cmp.text = e.target.value; $("pvText").textContent = e.target.value; $("cmpCount").textContent = `${e.target.value.length} / 2,200`;
+});
+
+
+/* ---------- Adapt for TikTok ---------- */
+const TT = {
+  caption: "A morning at our workshop in Lyon. Which step surprised you most? #handmade #lighting #behindthescenes #fyp",
+  short: "Morning at the workshop. Guess the step #handmade #fyp",
+  covers: [["50% 50%", "Both makers"], ["28% 45%", "Close on Julie"], ["78% 50%", "The lamp"]],
+  sounds: [["orig", "Original sound", "Keeps the workshop sounds from your Reel."], ["trend", "Trending: “Slow morning”", "Used in 210K videos this week, fits calm craft videos.", true]],
+  whens: [["tom", "Tomorrow 18:30", "Your TikTok audience peaks in the evening.", true], ["tonight", "Today 21:00", "Late, but while the Reel is still fresh."], ["draft", "Keep as a draft", "Decide later. It waits in Publishing."]],
+};
+const adFresh = () => ({ cover: 0, text: TT.caption, sound: "orig", when: "tom" });
+function openAdapt() { if (S.cmp?.src === "top") S.cmp = null; S.adapt = S.adapt || adFresh(); S.sel = "top"; renderQueue(); renderPane(); }
+function adaptPrimary() { return S.adapt.when === "draft" ? "Save draft" : S.adapt.when === "tom" ? "Schedule on TikTok, tomorrow 18:30" : "Schedule on TikTok, today 21:00"; }
+function adaptHTML() {
+  const a = S.adapt, snd = TT.sounds.find(([k]) => k === a.sound)[1].replace(/[“”]/g, "");
+  const opt = (k, list, cur) => list.map(([v, t, sub, rec]) => `<button class="when-o${cur === v ? " on" : ""}" data-ad="${k}" data-v="${v}" aria-pressed="${cur === v}"><span class="dot2"></span><span><b>${t}</b><small>${sub}</small></span>${rec ? `<span class="rec">Suggested</span>` : ""}</button>`).join("");
+  return `<div class="c-head"><span class="app-chip" style="--h:#18181b">${netB("TT")}Adapt for TikTok</span><span class="c-meta">From your top Reel on Instagram</span><span class="c-pos"></span></div>
+  <h2 class="c-title">Adapt your workshop Reel for TikTok</h2>
+  <div class="changed"><span class="ctx-l" style="font-size:12.5px;color:var(--faint);background:none;padding:0">Already done by your agent</span><span>${ic("check")}Cropped to 9:16</span><span>${ic("check")}Caption rewritten for TikTok</span><span>${ic("check")}Hashtags adapted</span><span>${ic("check")}Time picked for your TikTok audience</span></div>
+  <div class="adapt"><div class="cmp-l">
+    <div><span class="lbl">Cover</span><div class="covers">${TT.covers.map(([pos, name], i) => `<button class="cov${a.cover === i ? " on" : ""}" data-ad="cover" data-v="${i}" aria-pressed="${a.cover === i}" aria-label="Cover: ${name}" title="${name}"><img src="assets/post-atelier.jpg" alt="" style="object-position:${pos}" draggable="false"></button>`).join("")}</div></div>
+    <div><label class="lbl" for="adText">Caption</label><textarea id="adText" style="width:100%;min-height:90px;resize:vertical;padding:12px 14px;border-radius:12px;border:1px solid var(--line2);background:var(--card);color:var(--fg);font:15px/1.5 var(--sans);outline:none">${esc(a.text)}</textarea>
+      <div class="cmp-row"><div class="tweaks"><button class="chipb" data-ad="short">Shorter</button><button class="chipb" data-ad="ig">Use the Instagram caption</button><button class="chipb" data-ad="reset">${ic("undo")}Reset</button></div><span class="count" id="adCount">${a.text.length} / 2,200</span></div></div>
+    <div><span class="lbl">Sound</span><div class="whens">${opt("sound", TT.sounds, a.sound)}</div></div>
+    <div><span class="lbl">When</span><div class="whens">${opt("when", TT.whens, a.when)}</div></div>
+  </div>
+  <div class="pv-wrap"><span class="lbl">Preview on TikTok</span><div class="phone"><img src="assets/post-atelier.jpg" alt="Workshop Reel, cropped for TikTok" style="object-position:${TT.covers[a.cover][0]}" draggable="false">
+    <div class="tt-top">Following&nbsp;&nbsp;·&nbsp;&nbsp;For You</div>
+    <div class="tt-rail"><span class="av">ML</span><span><i>♥</i>0</span><span><i>…</i>0</span><span><i>↗</i>0</span></div>
+    <div class="tt-cap"><b>@maisonlumen</b><p id="adPv">${esc(a.text)}</p><div class="tt-snd">♪ ${esc(snd)}${a.sound === "orig" ? " · maisonlumen" : ""}</div></div></div></div></div>
+  <div class="c-foot"><button class="btn btn-g" data-ad="cancel">${ic("left")}Back to the top post</button><button class="btn btn-p" data-ad="go" style="margin-left:auto">${ic(a.when === "draft" ? "pen" : "calendar")}${adaptPrimary()}</button></div>`;
+}
+function adClick(b) {
+  const k = b.dataset.ad, v = b.dataset.v, a = S.adapt; if (!a) return;
+  if (k === "cover") a.cover = +v;
+  if (k === "sound") a.sound = v;
+  if (k === "when") a.when = v;
+  if (k === "short") a.text = TT.short;
+  if (k === "ig") a.text = "A morning at the workshop. Which step surprised you most?";
+  if (k === "reset") a.text = TT.caption;
+  if (k === "cancel") { S.adapt = null; return renderPane(); }
+  if (k === "go") {
+    S.adapt = null;
+    const when = a.when === "tom" ? "goes out tomorrow 18:30" : a.when === "tonight" ? "goes out today 21:00" : "saved as a draft";
+    return act("top", "primary", { text: `Workshop Reel adapted for TikTok, ${when}` });
+  }
+  renderPane(false);
+}
+document.addEventListener("input", (e) => {
+  if (e.target.id !== "adText" || !S.adapt) return;
+  S.adapt.text = e.target.value; $("adPv").textContent = e.target.value; $("adCount").textContent = `${e.target.value.length} / 2,200`;
 });
 
 /* ---------- Actions ---------- */
@@ -1019,6 +1096,7 @@ function commands() {
   if (!S.done.inbox) list.push({ sec: "Act on your day", icon: "inbox", h: "#ff6a3d", label: "Review inbox items one by one", hint: "Spam, replies, your call", run: () => openDrawer("spam") });
   list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "What happened over the weekend?", hint: "Archie", run: () => island("Archie would answer here, in the side panel", null, "info") });
   list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "Write a post about the Opale lamp", hint: "From the mention spike", run: () => openCompose("spike") });
+  if (!S.done.top) list.push({ sec: "Act on your day", icon: "send", h: "#18181b", label: "Adapt my top Reel for TikTok", hint: "Crop, caption, sound, time", run: openAdapt });
   if (!S.done.top) list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "Make a post like my top Reel", hint: "From your top post", run: () => openCompose("top") });
   list.push({ sec: "Go to", icon: "inbox", label: "Inbox", hint: "G then I", run: () => island("Inbox isn't part of this prototype", null, "info") });
   list.push({ sec: "Go to", icon: "calendar", label: "Publishing calendar", hint: "G then C", run: () => island("Calendar isn't part of this prototype", null, "info") });
@@ -1055,7 +1133,7 @@ $("cmdBtn").addEventListener("click", openPal);
 
 /* ---------- Misc ---------- */
 function replay() {
-  S.order = ["inbox", "post", "spike", "gap", "kpi", "top"]; S.done = {}; S.doneOrder = []; S.ib = ibFresh(); S.pick = 0; S.start = Date.now(); S.celebrated = false; S.cmp = null; S.sel = "inbox";
+  S.order = ["inbox", "post", "spike", "gap", "kpi", "top"]; S.done = {}; S.doneOrder = []; S.ib = ibFresh(); S.pick = 0; S.start = Date.now(); S.celebrated = false; S.cmp = null; S.adapt = null; S.sel = "inbox";
   update();
 }
 function countUp(el) {
@@ -1085,11 +1163,12 @@ document.addEventListener("click", (e) => {
   if (pk) { S.pick = +pk.dataset.pick; pk.closest(".drafts").querySelectorAll(".draft").forEach((d, i) => { d.classList.toggle("sel", i === S.pick); d.setAttribute("aria-pressed", i === S.pick); }); return; }
   const sl = e.target.closest("[data-sel]"); if (sl) return select(sl.dataset.sel);
   const cm = e.target.closest("[data-cmp]"); if (cm) return cmpClick(cm);
+  const ad = e.target.closest("[data-ad]"); if (ad) return adClick(ad);
   const b = e.target.closest("[data-act]"); if (!b) return;
   const id = $("pane").dataset.id;
   if (b.dataset.act === "primary") COMPOSE.includes(id) ? openCompose(id) : act(id, "primary");
   if (b.dataset.act === "compose") openCompose(b.dataset.src || "spike");
-  if (b.dataset.act === "alt" && ITEMS[id]?.alt) act(id, "primary", { text: ITEMS[id].alt[1] });
+  if (b.dataset.act === "alt" && id === "top") openAdapt();
   if (b.dataset.act === "next") select(nextAfter(id));
   if (b.dataset.act === "snooze") act(id, "snooze");
   if (b.dataset.act === "toast") island(b.dataset.msg, null, "info");

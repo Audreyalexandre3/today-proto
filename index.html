@@ -146,6 +146,57 @@
   .xcall .acts { display:flex; gap:var(--ref-spacing-xs); justify-content:flex-end; align-items:center; flex-wrap:wrap; }
   .decided { display:inline-flex; align-items:center; gap:var(--ref-spacing-xxs); margin-right:auto; }
   .decided.ok { color:var(--ref-color-green-150); }
+
+  /* Fun layer: greeting, progress segments, motion. Floating focus panel takes the DS dropdown shadow (it floats). */
+  .hello { padding:var(--ref-spacing-sm) var(--ref-spacing-md); display:flex; flex-direction:column; gap:var(--ref-spacing-sm); border:1px solid var(--ref-color-grey-20); border-radius:var(--ref-border-radius-md); background:var(--ref-color-white); }
+  .hello-top { display:flex; align-items:center; gap:var(--ref-spacing-sm); flex-wrap:wrap; }
+  .hello-top .stack { flex:1; min-width:240px; }
+  .hello-cta { display:flex; align-items:center; gap:var(--ref-spacing-xs); }
+  .segs { display:flex; gap:var(--ref-spacing-xxxs); }
+  .seg { flex:1; height:6px; border-radius:var(--ref-border-radius-sm); background:var(--ref-color-grey-05); transform-origin:center; }
+  .seg.on { background:var(--ref-color-green-100); }
+  .seg.just { animation:segpop .5s ease-out; }
+  .seg-legend { display:flex; justify-content:space-between; gap:var(--ref-spacing-xs); }
+  .kbd { display:inline-flex; align-items:center; justify-content:center; min-width:20px; border:1px solid var(--ref-color-grey-20); border-radius:4px; padding:0 5px; font-size:var(--ref-font-size-xs); line-height:18px; color:var(--ref-color-grey-80); background:var(--ref-color-white); }
+  .bump { animation:bump .35s ease-out; }
+  .feed.enter .ap-card.item, .feed.enter .hello { animation:lift .45s ease-out both; animation-delay:calc(var(--d, 0) * 70ms); }
+  .ap-card.item.arrive { animation:rise .5s ease-out both; }
+  .ap-card.item.leaving { overflow:hidden; opacity:0; transform:translateX(32px); max-height:0 !important; padding-top:0; padding-bottom:0; margin-top:calc(-1 * var(--ref-spacing-xs)); border-width:0;
+    transition:opacity .2s ease-in, transform .25s ease-in, max-height .3s ease-in .12s, padding .3s ease-in .12s, margin .3s ease-in .12s; }
+  .spark.draw polyline:last-child { stroke-dasharray:1; stroke-dashoffset:1; animation:draw 1.4s ease-out .3s forwards; }
+  .ap-status.live::before { animation:pulse 1.6s ease-in-out infinite; }
+  .list-row.fresh { animation:rise .45s ease-out both; }
+  .stars { display:inline-flex; gap:2px; color:var(--ref-color-yellow-100); }
+  .stars > i { font-size:14px; }
+  .sugg { background:var(--ref-color-grey-05); border-radius:var(--ref-border-radius-md); padding:var(--ref-spacing-xs) var(--ref-spacing-sm); display:flex; flex-direction:column; gap:var(--ref-spacing-xxxs); }
+
+  .focus { position:fixed; inset:0; z-index:90; background:color-mix(in srgb, var(--ref-color-grey-150) 45%, transparent); display:grid; place-items:center; padding:var(--ref-spacing-md); animation:fade .2s ease-out; }
+  .focus-panel { background:var(--ref-color-white); border-radius:var(--ref-border-radius-md); box-shadow:var(--comp-action-dropdown-box-shadow); width:min(760px,100%); max-height:calc(100vh - 48px); display:flex; flex-direction:column; overflow:hidden; animation:rise .25s ease-out; }
+  .focus-head { display:flex; flex-direction:column; gap:var(--ref-spacing-xs); padding:var(--ref-spacing-sm) var(--ref-spacing-md); border-bottom:1px solid var(--ref-color-grey-20); }
+  .focus-head .row { gap:var(--ref-spacing-xs); }
+  .focus-body { overflow:auto; padding:var(--ref-spacing-md); }
+  .focus-body .ap-card.item { border:0; padding:0; animation:slidein .3s ease-out; }
+  .focus-foot { display:flex; align-items:center; gap:var(--ref-spacing-sm); padding:var(--ref-spacing-xs) var(--ref-spacing-md); border-top:1px solid var(--ref-color-grey-20); flex-wrap:wrap; }
+  .focus-foot .hints { display:flex; gap:var(--ref-spacing-sm); flex-wrap:wrap; margin-right:auto; }
+  .focus-foot .hints span { display:inline-flex; align-items:center; gap:var(--ref-spacing-xxs); }
+  .focus-done { display:flex; flex-direction:column; align-items:center; gap:var(--ref-spacing-xs); padding:var(--ref-spacing-xl) var(--ref-spacing-md); text-align:center; }
+  .focus-done > i { font-size:48px; color:var(--ref-color-green-100); animation:checkpop .45s cubic-bezier(.2,1.6,.4,1); }
+
+  .recap { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--ref-spacing-xs); width:100%; max-width:560px; }
+  .recap .tile { text-align:left; }
+  .empty > i.party { animation:checkpop .5s cubic-bezier(.2,1.6,.4,1); }
+  #confetti { position:fixed; inset:0; pointer-events:none; z-index:95; }
+
+  @keyframes rise { from { opacity:0; transform:translateY(10px); } }
+  @keyframes lift { from { transform:translateY(12px); } }
+  @keyframes slidein { from { opacity:0; transform:translateX(24px); } }
+  @keyframes fade { from { opacity:0; } }
+  @keyframes bump { 50% { transform:scale(1.35); } }
+  @keyframes segpop { 0% { transform:scaleY(1); } 40% { transform:scaleY(2.2); } 100% { transform:scaleY(1); } }
+  @keyframes checkpop { 0% { transform:scale(.3); opacity:0; } 100% { transform:scale(1); opacity:1; } }
+  @keyframes draw { to { stroke-dashoffset:0; } }
+  @keyframes pulse { 50% { opacity:.25; } }
+  @media (prefers-reduced-motion:reduce){ .feed.enter .ap-card.item, .feed.enter .hello, .ap-card.item.arrive, .bump, .seg.just, .focus, .focus-panel, .focus-body .ap-card.item, .focus-done > i, .list-row.fresh, .empty > i.party, .ap-status.live::before { animation:none !important; } .spark.draw polyline:last-child { stroke-dasharray:none; animation:none; } }
   .snack { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:80; }
   .proto-note { position:fixed; right:16px; bottom:16px; z-index:70; }
 
@@ -203,8 +254,8 @@
           <div class="stack"><p class="ap-body-bold" id="dayCount"></p><div class="meter" aria-hidden="true"><span id="meter"></span></div><p class="ap-caption muted" id="dayLeft"></p></div>
         </section>
         <section class="ap-card sec">
-          <div class="stack"><h2 class="ap-h3">What your agents did</h2><p class="ap-caption muted">Since Friday 18:00. Nothing was sent without your approval.</p></div>
-          <div>
+          <div class="row"><div class="stack spacer"><h2 class="ap-h3">What your agents did</h2><p class="ap-caption muted">Since Friday 18:00. Nothing was sent without your approval.</p></div><span class="ap-status green live">Live</span></div>
+          <div id="activity">
             <div class="list-row"><i class="ap-icon-feature-inbox"></i><p class="ap-body spacer">Sorted 42 inbox items</p></div>
             <div class="list-row"><i class="ap-icon-pen"></i><p class="ap-body spacer">Drafted 21 replies</p></div>
             <div class="list-row"><i class="ap-icon-feature-listening"></i><p class="ap-body spacer">Flagged 1 mention spike</p></div>
@@ -224,6 +275,8 @@
   </div>
 </div>
 
+<div id="focus"></div>
+<canvas id="confetti" hidden></canvas>
 <div class="ap-snackbar success snack" id="snack" hidden><div class="ap-snackbar-left"><i></i><span id="snackText"></span></div><div class="ap-snackbar-right" id="snackRight"></div></div>
 
 <script>
@@ -369,13 +422,15 @@ function content(it) {
       </div><p class="ap-caption" id="pickErr" role="alert" style="color:var(--ref-color-red-150)"></p></div>`;
     return html;
   }
+  if (it.id === "review") return `<div class="quote"><div class="row"><i class="ap-icon-google-my-business-official" aria-hidden="true"></i><p class="ap-caption-bold">Nadia K.</p><span class="stars" aria-label="5 out of 5 stars">${icon("star_fill").repeat(5)}</span><p class="ap-caption muted">Google · Lyon store · just now</p></div><p class="ap-body">“Lovely shop, and the Opale is even better in person. Thank you Julie for the advice!”</p></div>
+    <div class="sugg"><p class="ap-caption-bold">Suggested reply</p><p class="ap-body">Thank you Nadia! Julie will be thrilled. See you soon at the Lyon store.</p></div>`;
   if (it.id === "kpi") return `<div class="tiles">
       <div class="tile"><p class="ap-caption muted">Engagements</p><p class="value">4,218</p><span class="delta good">${icon("arrow-up")}12%</span></div>
       <div class="tile"><p class="ap-caption muted">Reach</p><p class="value">38.6K</p><span class="delta good">${icon("arrow-up")}8%</span></div>
       <div class="tile"><p class="ap-caption muted">Video views</p><p class="value">12.9K</p><span class="delta good">${icon("arrow-up")}21%</span></div></div>
-    <svg class="spark" viewBox="0 0 300 56" preserveAspectRatio="none" role="img" aria-label="Daily engagements over the last 30 days, rising, compared with the previous 30 days">
+    <svg class="spark${S.drawn ? "" : " draw"}" viewBox="0 0 300 56" preserveAspectRatio="none" role="img" aria-label="Daily engagements over the last 30 days, rising, compared with the previous 30 days">
       <polyline fill="none" stroke="var(--ref-color-grey-40)" stroke-width="1.5" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" points="0,46 50,44 100,42 150,41 200,39 250,37 300,35"/>
-      <polyline fill="none" stroke="var(--ref-color-orange-100)" stroke-width="2" vector-effect="non-scaling-stroke" points="0,44 30,40 60,42 90,35 120,37 150,30 180,28 210,23 240,18 270,14 300,8"/></svg>
+      <polyline pathLength="1" fill="none" stroke="var(--ref-color-orange-100)" stroke-width="2" vector-effect="non-scaling-stroke" points="0,44 30,40 60,42 90,35 120,37 150,30 180,28 210,23 240,18 270,14 300,8"/></svg>
     <div class="row"><span class="row"><span style="width:12px;height:2px;background:var(--ref-color-orange-100)"></span><span class="ap-caption muted">Engagements, last 30 days</span></span><span class="row" style="margin-left:var(--ref-spacing-sm)"><span style="width:12px;height:2px;background:var(--ref-color-grey-40)"></span><span class="ap-caption muted">Previous 30 days</span></span></div>`;
 }
 
@@ -387,11 +442,12 @@ function actions(it) {
   if (it.id === "gap") return S.picking
     ? `<button type="button" class="ap-button ghost grey" data-act="pickcancel">Cancel</button><button type="button" class="ap-button primary orange" data-act="schedule">Schedule</button>`
     : `${snooze}<a class="ap-link small standalone" href="#" data-nav="Calendar">Open calendar</a><button type="button" class="ap-button stroked grey" data-act="pick"><i class="ap-icon-calendar--plus"></i><span>Fill with a draft</span></button>`;
+  if (it.id === "review") return `${snooze}<button type="button" class="ap-button ghost grey" data-act="toast" data-msg="This would open the reply editor">Edit reply</button><button type="button" class="ap-button stroked grey" data-act="done" data-id="review">Send thank-you</button>`;
   if (it.id === "kpi") return `${snooze}<a class="ap-link small standalone" href="#" data-nav="Reports">Open report</a><button type="button" class="ap-button stroked grey" data-act="done" data-id="kpi"><i class="ap-icon-data-report--plus"></i><span>Add to a report</span></button>`;
 }
 
-function card(it) {
-  return `<article class="ap-card item" aria-labelledby="t-${it.id}">
+function card(it, i = 0) {
+  return `<article class="ap-card item${S.arrive === it.id ? " arrive" : ""}" data-id="${it.id}" style="--d:${i + 1}" aria-labelledby="t-${it.id}">
     <div class="item-head"><span class="item-icon">${icon(it.icon)}</span>
       <div class="stack spacer"><h3 class="ap-h3" id="t-${it.id}">${esc(it.title)}</h3><p class="ap-caption muted">${esc(it.meta)}</p></div>
       <span class="ap-status ${it.status[0]}">${esc(it.status[1])}</span></div>
@@ -412,28 +468,163 @@ function render() {
   const you = open.filter((i) => i.group === "you").length;
   $("dayLeft").textContent = open.length ? (you ? `${you} still need${you > 1 ? "" : "s"} you` : "Nothing urgent left") : "All clear";
 
-  let html = `<div class="intro"><p class="ap-body muted">${open.length ? `${open.length} ${open.length > 1 ? "things" : "thing"} since Friday 18:00 for Maison Lumen. ${you ? `${you} need${you > 1 ? "" : "s"} you.` : "Nothing urgent."}` : "You're all caught up."}</p></div>`;
-  let any = false;
+  let html = hello(open, done, you);
+  let any = false, idx = 0;
   for (const [g, label] of GROUPS) {
     if (S.tab !== "all" && S.tab !== g) continue;
     const list = open.filter((i) => i.group === g);
     if (!list.length) continue;
     any = true;
-    html += `<section class="group" aria-label="${label}"><div class="group-head"><h2 class="ap-h2">${label}</h2><span class="ap-counter normal grey">${list.length}</span></div>${list.map(card).join("")}</section>`;
+    html += `<section class="group" aria-label="${label}"><div class="group-head"><h2 class="ap-h2">${label}</h2><span class="ap-counter normal grey">${list.length}</span></div>${list.map((it) => card(it, idx++)).join("")}</section>`;
   }
-  if (!any) html += `<section class="ap-card sec"><div class="empty"><i class="ap-icon-rounded-check_fill" aria-hidden="true"></i><h2 class="ap-h3">${open.length ? "Nothing left here" : "All clear. Nothing needs you right now."}</h2><p class="ap-body muted">${open.length ? "Other items are waiting in the other tabs." : "Your agents keep watching the Inbox, the calendar and your mentions. New items show up here and in your morning briefing."}</p>${open.length ? `<button type="button" class="ap-button primary blue" data-tab="all">Show all</button>` : ""}</div></section>`;
+  if (!any && open.length) html += `<section class="ap-card sec"><div class="empty"><i class="ap-icon-rounded-check_fill" aria-hidden="true"></i><h2 class="ap-h3">Nothing left here</h2><p class="ap-body muted">Other items are waiting in the other tabs.</p><button type="button" class="ap-button primary blue" data-tab="all">Show all</button></div></section>`;
+  if (!open.length) html += allClear(done);
   if (done.length) html += `<section class="ap-card sec"><div class="row"><h2 class="ap-h3 spacer">Done today</h2><span class="ap-counter normal grey">${done.length}</span></div><div>${done.map((i) => `<div class="list-row"><i class="ap-icon-rounded-check_fill ok" aria-hidden="true"></i><p class="ap-body spacer">${esc(S.done[i.id])}</p><button type="button" class="ap-button ghost grey" data-act="undo" data-id="${i.id}">Undo</button></div>`).join("")}</div></section>`;
   $("feed").innerHTML = html;
+  $("feed").classList.toggle("enter", !S.entered); S.entered = true;
+  if (open.some((i) => i.id === "kpi")) S.drawn = true;
+  S.arrive = null;
+  bumpCounters(open);
+  if (S.focus) renderFocus();
+  if (S.lastOpen > 0 && !open.length) celebrate();
+  S.lastOpen = open.length;
 }
+
+
+/* ---------- Fun layer ---------- */
+const START = Date.now();
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+S.lastOpen = null; S.prevCounts = {}; S.prevDone = 0; S.focus = null;
+const greeting = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; };
+const minutes = (open) => open.reduce((m, i) => m + (i.group === "you" ? 2 : 1), 0);
+
+function segments(done) {
+  const n = ITEMS.length, d = done.length, just = d > S.prevDone;
+  const html = `<div class="segs" aria-hidden="true">${ITEMS.map((_, i) => `<span class="seg${i < d ? " on" : ""}${just && i === d - 1 ? " just" : ""}"></span>`).join("")}</div>`;
+  S.prevDone = d;
+  return html;
+}
+
+function hello(open, done, you) {
+  const segs = segments(done);
+  if (!open.length) return "";
+  return `<section class="hello" style="--d:0" aria-label="Summary">
+    <div class="hello-top">
+      <div class="stack"><h2 class="ap-h2">${greeting()}, Camille</h2>
+        <p class="ap-body muted">${you ? `${you} ${you > 1 ? "things need" : "thing needs"} you, then ${open.length - you} to glance at.` : `Nothing urgent. ${open.length} to glance at.`} About ${minutes(open)} minutes. Your agents handled the rest since Friday.</p></div>
+      <div class="hello-cta"><span class="kbd" title="Keyboard shortcut">F</span><button type="button" class="ap-button primary orange" data-act="focus"><i class="ap-icon-arrow-right"></i><span>${done.length ? "Continue" : "Start my day"}</span></button></div>
+    </div>
+    <div class="stack">${segs}<div class="seg-legend"><p class="ap-caption muted">${done.length} of ${ITEMS.length} done</p><p class="ap-caption muted">${open.length} left</p></div></div>
+  </section>`;
+}
+
+function allClear(done) {
+  const secs = Math.round((Date.now() - START) / 1000), m = Math.floor(secs / 60), sec = secs % 60;
+  const handled = done.filter((i) => !String(S.done[i.id]).includes("snoozed")).length;
+  return `<section class="ap-card sec"><div class="empty">
+    <i class="ap-icon-rounded-check_fill party" aria-hidden="true"></i>
+    <h2 class="ap-h2">All clear, Camille. Nothing needs you right now.</h2>
+    <p class="ap-body muted">Your agents keep watching the Inbox, the calendar and your mentions. New items show up here and in your morning briefing.</p>
+    <div class="recap">
+      <div class="tile"><p class="ap-caption muted">Items handled</p><p class="value">${handled}</p></div>
+      <div class="tile"><p class="ap-caption muted">Time you spent</p><p class="value">${m ? `${m} min ` : ""}${sec} s</p></div>
+      <div class="tile"><p class="ap-caption muted">Time your agents saved you</p><p class="value">~35 min</p></div>
+    </div>
+  </div></section>`;
+}
+
+function bumpCounters(open) {
+  const now = { rail: open.length };
+  [["all"], ...GROUPS].forEach(([k]) => (now[k] = open.filter((i) => k === "all" || i.group === k).length));
+  const bump = (el) => { if (!el || REDUCED) return; el.classList.remove("bump"); void el.offsetWidth; el.classList.add("bump"); };
+  if (S.prevCounts.rail !== undefined && S.prevCounts.rail !== now.rail) bump($("railCount"));
+  document.querySelectorAll("#tabs [data-tab]").forEach((t) => { const k = t.dataset.tab; if (S.prevCounts[k] !== undefined && S.prevCounts[k] !== now[k]) bump(t.querySelector(".ap-counter")); });
+  S.prevCounts = now;
+}
+
+/* Done: fold the card away, then commit */
+function complete(id, text, snackText, kind = "success") {
+  if (S.focus && focusCurrent() === id) { S.done[id] = text; showFocusDone(text); return; }
+  const el = document.querySelector(`#feed article[data-id="${id}"]`);
+  const commit = () => { S.done[id] = text; render(); snack(snackText ?? text, () => undo(id), kind); };
+  if (!el || REDUCED) return commit();
+  el.style.maxHeight = el.scrollHeight + "px"; void el.offsetWidth; el.classList.add("leaving");
+  setTimeout(commit, 420);
+}
+
+/* Focus mode: one item at a time, keyboard first */
+function startFocus() {
+  const ids = GROUPS.flatMap(([g]) => ITEMS.filter((i) => i.group === g && !S.done[i.id]).map((i) => i.id));
+  if (!ids.length) return;
+  S.focus = { ids, i: 0 }; renderFocus();
+}
+function focusCurrent() { const f = S.focus; if (!f) return null; while (f.i < f.ids.length && S.done[f.ids[f.i]]) f.i++; return f.ids[f.i] ?? null; }
+function closeFocus() { S.focus = null; $("focus").innerHTML = ""; render(); }
+function renderFocus() {
+  const id = focusCurrent();
+  if (!id) { const left = ITEMS.filter((i) => !S.done[i.id]).length; S.focus = null; $("focus").innerHTML = ""; if (left) snack(`You went through the list. ${left} skipped ${left > 1 ? "items are" : "item is"} still on Today.`, null, "info"); return; }
+  const f = S.focus, it = ITEMS.find((i) => i.id === id), pos = f.ids.indexOf(id) + 1;
+  $("focus").innerHTML = `<div class="focus" role="dialog" aria-modal="true" aria-labelledby="focusTitle"><div class="focus-panel">
+    <div class="focus-head"><div class="row"><h2 class="ap-h2 spacer" id="focusTitle">Focus</h2><p class="ap-caption muted">${pos} of ${f.ids.length}</p><button type="button" class="ap-icon-button" data-act="fclose" aria-label="Exit focus (Esc)" title="Exit focus (Esc)"><i class="ap-icon-close"></i></button></div>
+      <div class="segs" aria-hidden="true">${f.ids.map((x, i) => `<span class="seg${S.done[x] ? " on" : ""}" style="${i === pos - 1 && !S.done[x] ? "background:var(--ref-color-grey-40)" : ""}"></span>`).join("")}</div></div>
+    <div class="focus-body" id="focusBody">${card(it)}</div>
+    <div class="focus-foot"><div class="hints ap-caption muted"><span><span class="kbd">A</span>Main action</span><span><span class="kbd">S</span>Snooze</span><span><span class="kbd">←</span><span class="kbd">→</span>Previous, next</span><span><span class="kbd">Esc</span>Exit</span></div>
+      <button type="button" class="ap-button ghost grey" data-act="fprev" ${pos === 1 ? "disabled" : ""}>Back</button><button type="button" class="ap-button stroked grey" data-act="fnext">Skip</button></div>
+  </div></div>`;
+  $("focus").querySelector(".focus-panel").focus?.();
+}
+function showFocusDone(text) {
+  const body = $("focusBody"); if (!body) return render();
+  body.innerHTML = `<div class="focus-done" role="status"><i class="ap-icon-rounded-check_fill" aria-hidden="true"></i><p class="ap-h3">${esc(text)}</p></div>`;
+  setTimeout(render, REDUCED ? 300 : 850);
+}
+
+/* Live: a new item arrives from the agents */
+function arrive() {
+  if (ITEMS.some((i) => i.id === "review")) return;
+  ITEMS.push({ id: "review", group: "good", icon: "star", title: "New 5-star review on Google", meta: "Inbox · Lyon store · just now", status: ["green", "New"],
+    why: "Reviews answered within a day bring twice as many repeat visits.", done: "Thanked Nadia for her 5-star review" });
+  S.arrive = "review";
+  const row = document.createElement("div"); row.className = "list-row fresh";
+  row.innerHTML = `<i class="ap-icon-star" aria-hidden="true"></i><p class="ap-body spacer">Spotted a 5-star review</p><span class="ap-caption muted">just now</span>`;
+  $("activity").prepend(row);
+  render();
+  snack("New from your agents: a 5-star review on Google", null, "info");
+}
+setTimeout(arrive, 9000);
+
+/* Confetti, in DS colours, once */
+function celebrate() {
+  if (REDUCED) return;
+  const c = $("confetti"), ctx = c.getContext("2d"), css = getComputedStyle(document.documentElement);
+  const cols = ["--ref-color-orange-100", "--ref-color-green-100", "--ref-color-mermaid-gradient-from", "--ref-color-mermaid-gradient-to", "--ref-color-yellow-100"].map((v) => css.getPropertyValue(v).trim() || "#ff6f3a");
+  c.width = innerWidth; c.height = innerHeight; c.hidden = false;
+  const bits = Array.from({ length: 140 }, () => ({ x: innerWidth / 2 + (Math.random() - .5) * 200, y: innerHeight / 3, vx: (Math.random() - .5) * 14, vy: -Math.random() * 12 - 4, r: Math.random() * 6 + 4, a: Math.random() * 6, va: (Math.random() - .5) * .3, c: cols[Math.floor(Math.random() * cols.length)] }));
+  const t0 = performance.now();
+  (function frame(t) {
+    ctx.clearRect(0, 0, c.width, c.height);
+    bits.forEach((b) => { b.vy += .35; b.vx *= .99; b.x += b.vx; b.y += b.vy; b.a += b.va; ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.a); ctx.fillStyle = b.c; ctx.fillRect(-b.r / 2, -b.r / 4, b.r, b.r / 2); ctx.restore(); });
+    if (t - t0 < 2200) requestAnimationFrame(frame); else { ctx.clearRect(0, 0, c.width, c.height); c.hidden = true; }
+  })(t0);
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest?.("input, textarea, select") || e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key.toLowerCase();
+  if (!S.focus) { if (k === "f") { e.preventDefault(); startFocus(); } return; }
+  if (k === "escape") return closeFocus();
+  if (k === "arrowright") { S.focus.i = Math.min(S.focus.i + 1, S.focus.ids.length); return renderFocus(); }
+  if (k === "arrowleft") { S.focus.i = Math.max(0, S.focus.i - 1); while (S.focus.i > 0 && S.done[S.focus.ids[S.focus.i]]) S.focus.i--; return renderFocus(); }
+  const panel = $("focus");
+  if (k === "s") panel.querySelector('[data-act="snooze"]')?.click();
+  if (k === "a") (panel.querySelector(".item-foot .ap-button.primary") || panel.querySelector(".item-foot .ap-button.stroked") || panel.querySelector('[data-act="bulk"]'))?.click();
+});
 
 function checkInboxDone() {
   if (S.inbox.spam && S.inbox.ready && S.inbox.calls) { finish("inbox", `Inbox triaged: ${S.inbox.spam} spam hidden, ${S.inbox.ready} replies sent, 6 decisions made`); return true; }
   return false;
 }
-function finish(id, text) {
-  S.done[id] = text; render();
-  snack(text, () => undo(id));
-}
+function finish(id, text) { complete(id, text); }
 function undo(id) {
   delete S.done[id];
   if (id === "inbox") { S.inbox = {}; S.calls = {}; S.off = { spam: new Set(), ready: new Set() }; S.open = null; }
@@ -442,6 +633,7 @@ function undo(id) {
 }
 
 document.addEventListener("click", (e) => {
+  if (e.target.classList?.contains("focus")) return closeFocus();
   const el = e.target.closest("[data-act],[data-nav],[data-tab]");
   if (!el) return;
   if (el.dataset.tab) { S.tab = el.dataset.tab; return render(); }
@@ -449,7 +641,12 @@ document.addEventListener("click", (e) => {
   const { act, id } = el.dataset;
   const it = ITEMS.find((i) => i.id === id);
   if (act === "done") finish(id, it.done);
-  if (act === "snooze") { S.done[id] = `${it.title} · snoozed until tomorrow`; render(); snack("Snoozed until tomorrow 9:00", () => undo(id), "info"); }
+  if (act === "snooze") complete(id, `${it.title} · snoozed until tomorrow`, "Snoozed until tomorrow 9:00", "info");
+  if (act === "focus") startFocus();
+  if (act === "fclose") closeFocus();
+  if (act === "fnext") { S.focus.i++; renderFocus(); }
+  if (act === "fprev") { S.focus.i = Math.max(0, S.focus.i - 1); renderFocus(); }
+  if (act === "toast") snack(el.dataset.msg, null, "info");
   if (act === "undo") undo(id);
   if (act === "changes") snack("This would open a note to Thomas", null, "info");
   if (act === "pick") { S.picking = true; render(); }

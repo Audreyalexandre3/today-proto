@@ -13,4 +13,4 @@ Built with the Agorapulse design system (`@agorapulse/ui-theme` 22.0.7 and `@ago
 
 ## Exploration: Today, clean (`next.html`)
 
-A second take outside the design system: a clean off-white look with one plain font (Inter), white cards and black buttons, plus new patterns: a card deck you swipe right to act and left to snooze (or ← →), a ⌘K command bar, a live agent feed that types in new activity, a bento of numbers, a progress ring, and an All clear end state. Live: https://audreyalexandre3.github.io/today-proto/next.html
+A second take outside the design system: a clean off-white look with one plain font (Inter), white cards and black buttons, plus new patterns: a card deck you swipe right to act and left to snooze (or ← →), a ⌘K command bar, a live agent feed that types in new activity, a bento of numbers, a progress ring, and an All clear end state. The inbox card's Review buttons open a side panel to handle spam, drafted replies and "your call" items one by one (keep, hide, send, skip, edit a reply for one person or a whole group). Live: https://audreyalexandre3.github.io/today-proto/next.html

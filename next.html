@@ -632,6 +632,7 @@ function inboxDoneText() {
   const parts = [];
   const h = countOf("spam", "hide"), sent = countOf("ready", "sent"), calls = countOf("calls", "ok");
   if (h) parts.push(`${h} spam hidden`); if (sent) parts.push(`${plural(sent, "reply", "replies")} sent`); if (calls) parts.push(`${calls} handled by you`);
+  const rest = left("calls") + countOf("calls", "skip") + countOf("ready", "skip") + countOf("spam", "keep"); if (rest) parts.push(`${rest} left in Inbox`);
   return `Inbox cleared${parts.length ? ": " + parts.join(", ") : ""}`;
 }
 function lanesHTML() {
@@ -704,6 +705,7 @@ function renderDrawer() {
         ${ed ? `<div class="editor"><textarea id="edR" aria-label="Reply to ${esc(c.who)}">${esc(own ?? c.reply)}</textarea><div class="ed-acts"><button class="tbtn ghost" data-ib="cancel">Cancel</button><button class="tbtn solid" data-ib="saveR" data-key="${key}" data-send="1">Send this reply</button></div></div>` : ""}</div>`; }).join("");
   }
   $("drBody").innerHTML = html;
+  refreshInbox();
   const n = left(k);
   $("drFoot").innerHTML = `<span class="sp">${n ? `${n} left to decide` : `${ic("check")} All decided`}</span>`
     + (k === "spam" && n ? `<button class="btn btn-g" data-ib="bulk" data-k="spam">Hide the ${n} left</button>` : "")

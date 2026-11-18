@@ -176,6 +176,70 @@ h1 { margin:0; font-size:clamp(28px, 3vw, 40px); line-height:1.15; font-weight:6
 .bubble { align-self:flex-end; max-width:82%; padding:12px 14px; border-radius:14px 14px 4px 14px; background:var(--glass2); font-size:15px; }
 .bubble small { display:flex; align-items:center; gap:6px; color:var(--muted); font-size:12px; margin-bottom:4px; }
 
+
+/* Inbox lanes with two actions */
+.lane { cursor:default; }
+.lane:hover { background:var(--card); }
+.l-row { margin-top:10px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.tbtn { height:30px; padding:0 10px; border-radius:8px; font-size:13px; font-weight:500; display:inline-flex; align-items:center; gap:6px; }
+.tbtn.solid { background:var(--fg); color:#fff; }
+.tbtn.solid:hover { background:#3f3f46; }
+.tbtn.line { box-shadow:inset 0 0 0 1px var(--line2); background:var(--card); }
+.tbtn.line:hover { background:var(--glass2); }
+.tbtn.ghost { color:var(--muted); }
+.tbtn.ghost:hover { color:var(--fg); background:var(--glass2); }
+.tbtn svg.i { width:14px; height:14px; }
+.l-sum { font-size:12.5px; color:var(--muted); }
+
+/* Review drawer */
+.scrim { position:fixed; inset:0; z-index:65; background:rgba(24,24,27,.16); opacity:0; pointer-events:none; transition:opacity .25s; }
+.scrim.open { opacity:1; pointer-events:auto; }
+.drawer { position:fixed; top:0; right:0; bottom:0; z-index:66; width:min(560px, 100vw); background:var(--card); box-shadow:-24px 0 64px -24px rgba(24,24,27,.22), -1px 0 0 var(--line); display:flex; flex-direction:column; transform:translateX(102%); transition:transform .35s cubic-bezier(.2,.9,.2,1); }
+.drawer.open { transform:none; }
+.dr-head { padding:20px 24px 0; display:flex; flex-direction:column; gap:14px; border-bottom:1px solid var(--line); }
+.dr-top { display:flex; align-items:center; gap:10px; }
+.dr-top h2 { margin:0; font-size:18px; font-weight:600; letter-spacing:-.01em; flex:1; }
+.seg { display:flex; gap:4px; }
+.seg button { position:relative; height:38px; padding:0 12px; font-size:14px; font-weight:500; color:var(--muted); display:inline-flex; align-items:center; gap:8px; }
+.seg button.on { color:var(--fg); }
+.seg button.on::after { content:""; position:absolute; left:8px; right:8px; bottom:-1px; height:2px; background:var(--fg); border-radius:2px; }
+.seg .n { min-width:20px; height:20px; padding:0 6px; border-radius:10px; background:var(--glass2); font-size:12px; display:grid; place-items:center; }
+.seg .n.zero { background:color-mix(in srgb, var(--green) 12%, var(--card)); color:var(--green); }
+.dr-body { flex:1; overflow:auto; padding:8px 24px 24px; }
+.dr-note { margin:12px 0 4px; font-size:13px; color:var(--muted); display:flex; gap:8px; }
+.dr-note svg.i { width:15px; height:15px; color:var(--faint); margin-top:2px; }
+.topic { margin-top:18px; }
+.topic-h { display:flex; align-items:baseline; gap:8px; margin-bottom:8px; }
+.topic-h b { font-size:14.5px; font-weight:600; }
+.topic-h span { font-size:12.5px; color:var(--muted); }
+.sugg { padding:10px 12px; border-radius:10px; background:var(--glass2); font-size:13.5px; display:flex; gap:10px; align-items:flex-start; margin-bottom:6px; }
+.sugg p { margin:0; flex:1; }
+.sugg small { display:block; color:var(--muted); font-size:12px; margin-bottom:2px; }
+.row-it { display:grid; grid-template-columns:22px 1fr auto; gap:12px; align-items:start; padding:12px 0; border-top:1px solid var(--line); }
+.row-it:first-child { border-top:0; }
+.row-it .who { font-size:13.5px; font-weight:600; }
+.row-it .who span { font-weight:400; color:var(--faint); margin-left:6px; font-size:12.5px; }
+.row-it .txt { margin:2px 0 0; font-size:14px; }
+.row-it .rep { margin:6px 0 0; font-size:13px; color:var(--muted); display:flex; gap:6px; }
+.row-it .rep svg.i { width:14px; height:14px; margin-top:2px; flex:none; }
+.row-it .rep.custom { color:var(--fg); }
+.row-it .why { margin:6px 0 0; font-size:12.5px; color:var(--muted); display:flex; gap:6px; }
+.row-it .why svg.i { width:13px; height:13px; margin-top:2px; color:var(--faint); flex:none; }
+.row-it .acts { display:flex; gap:4px; align-items:center; }
+.row-it.decided .who, .row-it.decided .txt { color:var(--faint); }
+.row-it.decided .rep, .row-it.decided .why { display:none; }
+.state { font-size:12.5px; font-weight:500; display:inline-flex; align-items:center; gap:5px; color:var(--muted); }
+.state.ok { color:var(--green); }
+.state svg.i { width:14px; height:14px; }
+.call-acts { grid-column:2 / 4; display:flex; gap:6px; flex-wrap:wrap; margin-top:2px; }
+.editor { grid-column:2 / 4; display:flex; flex-direction:column; gap:8px; }
+.editor textarea, .sugg textarea { width:100%; min-height:72px; resize:vertical; padding:10px 12px; border-radius:10px; border:1px solid var(--line2); background:var(--card); color:var(--fg); font:14px/1.45 var(--sans); outline:none; }
+.editor textarea:focus, .sugg textarea:focus { border-color:var(--fg); }
+.editor .ed-acts { display:flex; gap:6px; justify-content:flex-end; }
+.dr-foot { display:flex; align-items:center; gap:10px; padding:14px 24px; border-top:1px solid var(--line); }
+.dr-foot .sp { flex:1; font-size:13px; color:var(--muted); }
+@media (max-width:760px) { .row-it { grid-template-columns:22px 1fr; } .row-it .acts { grid-column:2; } }
+
 /* Tray */
 .tray { margin-top:6px; display:flex; flex-wrap:wrap; gap:8px; min-height:38px; align-items:center; }
 .tray-l { font-size:13px; color:var(--faint); margin-right:4px; }
@@ -382,6 +446,15 @@ h1 { margin:0; font-size:clamp(28px, 3vw, 40px); line-height:1.15; font-weight:6
     <div class="pal-foot"><span><span class="kbd">↑</span><span class="kbd">↓</span>Move</span><span><span class="kbd">↵</span>Run</span><span><span class="kbd">esc</span>Close</span></div>
   </div>
 </div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drTitle" inert>
+  <div class="dr-head">
+    <div class="dr-top"><h2 id="drTitle">Inbox · 42 since Friday</h2><button class="btn btn-g btn-round" data-ib="close" aria-label="Close" title="Close (Esc)" style="width:36px;height:36px"><span data-i="x"></span></button></div>
+    <div class="seg" role="tablist" id="drTabs"></div>
+  </div>
+  <div class="dr-body" id="drBody"></div>
+  <div class="dr-foot" id="drFoot"></div>
+</aside>
 <canvas id="confetti" hidden></canvas>
 
 <script>
@@ -420,7 +493,7 @@ const DRAFTS = [["assets/post-atelier.jpg", "Behind the scenes at the workshop",
 const ITEMS = {
   inbox: { app: "Inbox", icon: "inbox", h: "#ff6a3d", need: true, meta: "5 profiles · since Friday", title: "42 new conversations, sorted for you",
     why: "Your moderation agent did the triage. 30 can go in one click, 6 need your judgment.", primary: "Clear 30 in bulk", primaryIcon: "zap",
-    done: "Inbox cleared: 9 spam hidden, 21 replies sent", mins: 3 },
+    done: () => inboxDoneText(), mins: 3 },
   post: { app: "Publishing", icon: "send", h: "#f472b6", need: true, meta: "@maisonlumen · Instagram", title: "Thomas's post is waiting for your OK",
     why: "You approve everything on @maisonlumen. It goes out Thursday at 10:00.", primary: "Approve", primaryIcon: "check",
     secondary: ["Request changes", "This would open a note to Thomas"], done: "Post approved for Thursday 10:00", mins: 1 },
@@ -442,11 +515,7 @@ const els = {};
 
 function body(id) {
   if (id === "inbox") return `
-    <div class="lanes">
-      <button class="lane${S.inbox.spam ? " ok" : ""}" data-lane="spam"><span class="muted">Spam</span><b>${S.inbox.spam ? 0 : 9}</b><span class="l-act">${S.inbox.spam ? `${ic("check")}Hidden` : "Hide all"}</span></button>
-      <button class="lane${S.inbox.ready ? " ok" : ""}" data-lane="ready"><span class="muted">Replies drafted</span><b>${S.inbox.ready ? 0 : 21}</b><span class="l-act">${S.inbox.ready ? `${ic("check")}Sent` : "Send all"}</span></button>
-      <div class="lane mine"><span class="muted">Your call</span><b>6</b><span class="l-act" style="color:var(--muted)">Stay in Inbox</span></div>
-    </div>
+    ${lanesHTML()}
     <div class="mini-feed">
       <div class="mf"><span class="net ig">IG</span><span>“Do you ship the Opale to Belgium?” · reply drafted</span></div>
       <div class="mf"><span class="net fb">f</span><span>“Love the new window display!” · reply drafted</span></div>
@@ -503,6 +572,172 @@ function makeCard(id) {
 }
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+
+/* ---------- Inbox, item by item ---------- */
+const NETS = { IG: ["ig", "IG"], FB: ["fb", "f"], LI: ["li", "in"], G: ["g", "G"], TT: ["tt", "♪"] };
+const netB = (n) => `<span class="net ${NETS[n][0]}" title="${n}">${NETS[n][1]}</span>`;
+const IB = {
+  spam: [
+    { n: "IG", who: "@win.cash.now", when: "Sat 22:14", text: "Win €500 now!!! Link in bio" },
+    { n: "IG", who: "@crypto_daily88", when: "Sat 20:02", text: "DM me to double your money in 24h" },
+    { n: "FB", who: "Promo Deals", when: "Sat 17:40", text: "Free iPhone for the first 100, click here" },
+    { n: "IG", who: "@followers.boost", when: "Sat 11:05", text: "Get 10k followers today, real accounts" },
+    { n: "TT", who: "@giftcard.drop", when: "Sun 09:31", text: "Claim your €100 gift card before midnight" },
+    { n: "FB", who: "Lucky Draw FR", when: "Sun 13:12", text: "You won! Confirm your address here" },
+    { n: "IG", who: "@lamps.outlet.cheap", when: "Sun 15:48", text: "Same lamp 80% cheaper on our site" },
+    { n: "IG", who: "@win.cash.now", when: "Sun 21:20", text: "Last chance!!! Link in bio" },
+    { n: "TT", who: "@promo.bot.22", when: "Mon 07:55", text: "Check my profile for a surprise" },
+  ],
+  ready: [
+    { name: "Shipping abroad", reply: "Yes, we ship across Europe in 3 to 5 business days. Details: maisonlumen.com/shipping", items: [
+      { n: "IG", who: "Camille Roux", when: "Fri 19:02", text: "Do you ship to Belgium?" },
+      { n: "FB", who: "Lukas Meier", when: "Sat 09:15", text: "Delivery to Switzerland possible?" },
+      { n: "IG", who: "@ana.home", when: "Sat 12:40", text: "Do you deliver to Portugal?" },
+      { n: "IG", who: "@nordic.nest", when: "Sat 16:22", text: "Shipping to Denmark?" },
+      { n: "FB", who: "Sofia Rossi", when: "Sun 10:05", text: "Ship to Italy?" },
+      { n: "IG", who: "@lea.interiors", when: "Sun 14:31", text: "How long to Luxembourg?" },
+      { n: "LI", who: "Pieter de Vries", when: "Sun 18:44", text: "Do you ship to the Netherlands?" },
+      { n: "IG", who: "@maison.claire", when: "Mon 08:10", text: "Shipping to Spain, how much?" } ] },
+    { name: "Is the Opale in stock?", reply: "The Opale is in stock in white and brass, online and in our stores.", items: [
+      { n: "IG", who: "@jules.decor", when: "Fri 20:11", text: "Opale in white still available?" },
+      { n: "IG", who: "Inès B.", when: "Sat 10:30", text: "When is the brass Opale back?" },
+      { n: "FB", who: "Marc Petit", when: "Sat 15:02", text: "Is the Opale in stock in Lyon?" },
+      { n: "TT", who: "@lou.home", when: "Sun 11:47", text: "Where can I buy the Opale??" },
+      { n: "IG", who: "@petit.salon", when: "Sun 16:20", text: "Still in stock after the TikTok?" },
+      { n: "IG", who: "@atelier.vert", when: "Sun 19:58", text: "Opale available online?" },
+      { n: "FB", who: "Claire Morel", when: "Mon 08:42", text: "Do you have the Opale in brass?" } ] },
+    { name: "Store opening hours", reply: "Our stores are open Tuesday to Saturday, 10:00 to 19:00.", items: [
+      { n: "G", who: "Nadia K.", when: "Sat 09:01", text: "Are you open on Sunday?" },
+      { n: "IG", who: "@city.walks", when: "Sat 13:25", text: "Lyon store hours?" },
+      { n: "FB", who: "Henri Blanc", when: "Sat 18:40", text: "Open on November 11?" },
+      { n: "G", who: "Emma L.", when: "Sun 10:12", text: "What time do you close on Saturday?" },
+      { n: "IG", who: "@weekend.paris", when: "Sun 15:33", text: "Open Monday?" },
+      { n: "FB", who: "Julien Faure", when: "Mon 07:30", text: "Opening hours this week?" } ] },
+  ],
+  calls: [
+    { n: "G", who: "Thomas Girard", kind: "Review, 2 stars", when: "Sat 11:20", text: "Lamp arrived with a cracked shade. Still waiting for my refund.", why: "Negative review. Your rule: apologize and move to email.", action: "Send apology", reply: "We're so sorry, Thomas. We've emailed you to sort out the refund today.", done: "Apology sent" },
+    { n: "IG", who: "Inès Morel", kind: "Comment", when: "Sat 16:05", text: "Is this the lamp from the Le Monde article? Did the price go up?", why: "Price question with no approved reply yet.", action: "Send reply", reply: "Yes, it's the Opale! The price hasn't changed: €189.", done: "Reply sent" },
+    { n: "FB", who: "Paul Vasseur", kind: "Message", when: "Sun 09:48", text: "Can I return a lamp bought in store by mail?", why: "Your returns policy changed last week.", action: "Send returns policy", reply: "Yes, within 30 days. Here's how: maisonlumen.com/returns", done: "Policy sent" },
+    { n: "TT", who: "@lou.creates", kind: "Comment", when: "Sun 12:30", text: "Would you work with small creators? I have 12k followers", why: "Partnership request, not a sales lead.", action: "Assign to Marketing", done: "Assigned to Marketing" },
+    { n: "IG", who: "@studio.nord", kind: "Mention", when: "Sun 17:02", text: "Waited 40 min at your Lyon opening, worth it though", why: "Mixed tone. A light thank-you usually works.", action: "Send thanks", reply: "Thank you for your patience, see you soon!", done: "Reply sent" },
+    { n: "LI", who: "Claire Dumas", kind: "Comment", when: "Mon 08:20", text: "Are you hiring for the Lyon store?", why: "Hiring question, rarely seen.", action: "Send careers link", reply: "We are! Openings are here: maisonlumen.com/careers", done: "Reply sent" },
+  ],
+};
+const readyKeys = IB.ready.flatMap((t, ti) => t.items.map((_, i) => `${ti}-${i}`));
+const ibFresh = () => ({ spam: {}, ready: {}, calls: {}, custom: {}, topic: {}, edit: null, tab: "spam" });
+S.ib = ibFresh();
+const left = (k) => k === "spam" ? IB.spam.length - Object.keys(S.ib.spam).length : k === "ready" ? readyKeys.length - Object.keys(S.ib.ready).length : IB.calls.length - Object.keys(S.ib.calls).length;
+const countOf = (k, v) => Object.values(S.ib[k]).filter((x) => x === v).length;
+function inboxDoneText() {
+  const parts = [];
+  const h = countOf("spam", "hide"), sent = countOf("ready", "sent"), calls = countOf("calls", "ok");
+  if (h) parts.push(`${h} spam hidden`); if (sent) parts.push(`${plural(sent, "reply", "replies")} sent`); if (calls) parts.push(`${calls} handled by you`);
+  return `Inbox cleared${parts.length ? ": " + parts.join(", ") : ""}`;
+}
+function lanesHTML() {
+  const lane = (k, label, bulkLabel, sumFn) => {
+    const n = left(k), done = k !== "calls" && n === 0;
+    return `<div class="lane${done ? " ok" : ""}"><span class="muted">${label}</span><b>${n}</b>
+      ${done ? `<span class="l-act">${ic("check")}${sumFn()}</span><div class="l-row"><button class="tbtn ghost" data-ib="open" data-k="${k}">See them</button></div>`
+        : `<div class="l-row">${bulkLabel ? `<button class="tbtn solid" data-ib="bulk" data-k="${k}">${bulkLabel}${n < (k === "spam" ? 9 : 21) ? ` ${n}` : " all"}</button>` : ""}<button class="tbtn line" data-ib="open" data-k="${k}">Review${bulkLabel ? "" : " one by one"}</button></div>`}</div>`;
+  };
+  return `<div class="lanes">
+    ${lane("spam", "Spam", "Hide", () => `${countOf("spam", "hide")} hidden${countOf("spam", "keep") ? `, ${countOf("spam", "keep")} kept` : ""}`)}
+    ${lane("ready", "Replies drafted", "Send", () => `${countOf("ready", "sent")} sent${countOf("ready", "skip") ? `, ${countOf("ready", "skip")} skipped` : ""}`)}
+    ${lane("calls", left("calls") ? "Your call" : "Your call · done", "", () => "")}
+  </div>`;
+}
+function refreshInbox() {
+  const card = els.inbox; if (!card) return;
+  card.querySelector(".lanes").outerHTML = lanesHTML();
+  const n = left("spam") + left("ready");
+  card.querySelector('[data-act="primary"]').innerHTML = `${ic("zap")}${n ? `Clear ${n} in bulk` : "Done with the inbox"}`;
+}
+function bulk(k) {
+  if (k === "spam") IB.spam.forEach((_, i) => { if (!S.ib.spam[i]) S.ib.spam[i] = "hide"; });
+  if (k === "ready") readyKeys.forEach((key) => { if (!S.ib.ready[key]) S.ib.ready[key] = "sent"; });
+}
+
+/* Drawer */
+function openDrawer(k) { S.ib.tab = k; S.ib.edit = null; $("drawer").inert = false; $("drawer").classList.add("open"); $("scrim").classList.add("open"); renderDrawer(); setTimeout(() => $("drawer").querySelector(".seg .on")?.focus(), 50); }
+function closeDrawer() {
+  if (!$("drawer").classList.contains("open")) return;
+  $("drawer").classList.remove("open"); $("scrim").classList.remove("open"); $("drawer").inert = true;
+  refreshInbox();
+  if (!S.done.inbox && left("spam") === 0 && left("ready") === 0) setTimeout(() => act("inbox", "primary"), 350);
+}
+const TABS = [["spam", "Spam"], ["ready", "Replies drafted"], ["calls", "Your call"]];
+function renderDrawer() {
+  const k = S.ib.tab;
+  $("drTabs").innerHTML = TABS.map(([t, l]) => `<button role="tab" aria-selected="${t === k}" class="${t === k ? "on" : ""}" data-ib="tab" data-k="${t}">${l}<span class="n${left(t) ? "" : " zero"}">${left(t) || ic("check")}</span></button>`).join("");
+  let html = "";
+  const undoBtn = (k2, key) => `<button class="tbtn ghost" data-ib="reset" data-k="${k2}" data-key="${key}">Undo</button>`;
+  if (k === "spam") {
+    html += `<p class="dr-note">${ic("sparkles")}<span>Your moderation agent marked these as spam. Keep anything that looks real.</span></p>`;
+    html += IB.spam.map((x, i) => { const v = S.ib.spam[i]; return `<div class="row-it${v ? " decided" : ""}">${netB(x.n)}<div><div class="who">${esc(x.who)}<span>${x.when}</span></div><p class="txt">${esc(x.text)}</p></div>
+      <div class="acts">${v ? `<span class="state${v === "hide" ? " ok" : ""}">${ic(v === "hide" ? "check" : "eye")}${v === "hide" ? "Hidden" : "Kept"}</span>${undoBtn("spam", i)}`
+        : `<button class="tbtn ghost" data-ib="set" data-k="spam" data-key="${i}" data-v="keep">Not spam</button><button class="tbtn line" data-ib="set" data-k="spam" data-key="${i}" data-v="hide">Hide</button>`}</div></div>`; }).join("");
+  }
+  if (k === "ready") {
+    html += `<p class="dr-note">${ic("sparkles")}<span>Grouped by question. Edit the reply for a whole group, or for one person.</span></p>`;
+    html += IB.ready.map((t, ti) => {
+      const reply = S.ib.topic[ti] ?? t.reply, editingT = S.ib.edit === `t${ti}`;
+      return `<div class="topic"><div class="topic-h"><b>${esc(t.name)}</b><span>${plural(t.items.length, "message", "messages")}</span></div>
+        <div class="sugg">${editingT ? `<div style="flex:1;display:flex;flex-direction:column;gap:8px"><textarea id="edT" aria-label="Reply for ${esc(t.name)}">${esc(reply)}</textarea><div style="display:flex;gap:6px;justify-content:flex-end"><button class="tbtn ghost" data-ib="cancel">Cancel</button><button class="tbtn solid" data-ib="saveT" data-key="${ti}">Save for the group</button></div></div>`
+          : `<p><small>Reply for this group</small>${esc(reply)}</p><button class="tbtn ghost" data-ib="editT" data-key="${ti}">${ic("pen")}Edit</button>`}</div>
+        ${t.items.map((x, i) => { const key = `${ti}-${i}`, v = S.ib.ready[key], own = S.ib.custom[key], ed = S.ib.edit === key;
+          return `<div class="row-it${v ? " decided" : ""}">${netB(x.n)}<div><div class="who">${esc(x.who)}<span>${x.when}</span></div><p class="txt">${esc(x.text)}</p>
+            ${own ? `<p class="rep custom">${ic("pen")}<span>${esc(own)}</span></p>` : ""}</div>
+            <div class="acts">${v ? `<span class="state${v === "sent" ? " ok" : ""}">${ic(v === "sent" ? "check" : "clock")}${v === "sent" ? "Sent" : "Left in Inbox"}</span>${undoBtn("ready", key)}`
+              : ed ? "" : `<button class="tbtn ghost" data-ib="set" data-k="ready" data-key="${key}" data-v="skip">Skip</button><button class="tbtn ghost" data-ib="edit" data-key="${key}">Edit</button><button class="tbtn line" data-ib="set" data-k="ready" data-key="${key}" data-v="sent">Send</button>`}</div>
+            ${ed ? `<div class="editor"><textarea id="edR" aria-label="Reply to ${esc(x.who)}">${esc(own ?? reply)}</textarea><div class="ed-acts"><button class="tbtn ghost" data-ib="cancel">Cancel</button><button class="tbtn line" data-ib="saveR" data-key="${key}">Save</button><button class="tbtn solid" data-ib="saveR" data-key="${key}" data-send="1">Send this reply</button></div></div>` : ""}</div>`; }).join("")}</div>`;
+    }).join("");
+  }
+  if (k === "calls") {
+    html += `<p class="dr-note">${ic("sparkles")}<span>These need a human. Your agent suggests a next step for each.</span></p>`;
+    html += IB.calls.map((c, i) => { const v = S.ib.calls[i], key = `c${i}`, ed = S.ib.edit === key, own = S.ib.custom[key];
+      return `<div class="row-it${v ? " decided" : ""}">${netB(c.n)}<div><div class="who">${esc(c.who)}<span>${esc(c.kind)} · ${c.when}</span></div><p class="txt">${esc(c.text)}</p>
+        <p class="why">${ic("sparkles")}<span>${esc(c.why)}</span></p>
+        ${c.reply && !ed ? `<p class="rep${own ? " custom" : ""}">${ic("pen")}<span>${esc(own ?? c.reply)}</span></p>` : ""}</div>
+        <div class="acts">${v ? `<span class="state${v === "ok" ? " ok" : ""}">${ic(v === "ok" ? "check" : "clock")}${v === "ok" ? esc(c.done) : "Left in Inbox"}</span>${undoBtn("calls", i)}` : ""}</div>
+        ${!v && !ed ? `<div class="call-acts"><button class="tbtn line" data-ib="set" data-k="calls" data-key="${i}" data-v="ok">${esc(c.action)}</button>${c.reply ? `<button class="tbtn ghost" data-ib="edit" data-key="${key}">Edit reply</button>` : ""}<button class="tbtn ghost" data-ib="set" data-k="calls" data-key="${i}" data-v="skip">Leave in Inbox</button></div>` : ""}
+        ${ed ? `<div class="editor"><textarea id="edR" aria-label="Reply to ${esc(c.who)}">${esc(own ?? c.reply)}</textarea><div class="ed-acts"><button class="tbtn ghost" data-ib="cancel">Cancel</button><button class="tbtn solid" data-ib="saveR" data-key="${key}" data-send="1">Send this reply</button></div></div>` : ""}</div>`; }).join("");
+  }
+  $("drBody").innerHTML = html;
+  const n = left(k);
+  $("drFoot").innerHTML = `<span class="sp">${n ? `${n} left to decide` : `${ic("check")} All decided`}</span>`
+    + (k === "spam" && n ? `<button class="btn btn-g" data-ib="bulk" data-k="spam">Hide the ${n} left</button>` : "")
+    + (k === "ready" && n ? `<button class="btn btn-g" data-ib="bulk" data-k="ready">Send the ${n} left</button>` : "")
+    + (n && k !== "calls" ? "" : (k === "calls" && n ? "" : (TABS.findIndex(([t]) => t === k) < 2 ? `<button class="btn btn-p" data-ib="tab" data-k="${TABS[TABS.findIndex(([t]) => t === k) + 1][0]}">Next: ${TABS[TABS.findIndex(([t]) => t === k) + 1][1]}${ic("right")}</button>` : "")))
+    + `<button class="btn btn-${n ? "p" : "g"}" data-ib="close">Done</button>`;
+  setTimeout(() => $("edT")?.focus() || $("edR")?.focus(), 0);
+}
+function ibClick(b) {
+  const a = b.dataset.ib, k = b.dataset.k, key = b.dataset.key;
+  if (a === "open") return openDrawer(k);
+  if (a === "close") return closeDrawer();
+  if (a === "tab") { S.ib.tab = k; S.ib.edit = null; $("drBody").scrollTop = 0; return renderDrawer(); }
+  if (a === "bulk") {
+    const before = JSON.stringify(S.ib[k]); const n = left(k); bulk(k);
+    island(k === "spam" ? `${plural(n, "spam comment", "spam comments")} hidden` : `${plural(n, "reply", "replies")} sent`, () => { S.ib[k] = JSON.parse(before); refreshInbox(); if ($("drawer").classList.contains("open")) renderDrawer(); }, "ok");
+    refreshInbox();
+    if ($("drawer").classList.contains("open")) return renderDrawer();
+    if (left("spam") === 0 && left("ready") === 0) setTimeout(() => act("inbox", "primary"), 600);
+    return;
+  }
+  if (a === "set") { S.ib[k][key] = b.dataset.v; return renderDrawer(); }
+  if (a === "reset") { delete S.ib[k][key]; return renderDrawer(); }
+  if (a === "edit" || a === "editT") { S.ib.edit = a === "editT" ? `t${key}` : key; return renderDrawer(); }
+  if (a === "cancel") { S.ib.edit = null; return renderDrawer(); }
+  if (a === "saveT") { S.ib.topic[key] = $("edT").value.trim() || IB.ready[key].reply; S.ib.edit = null; return renderDrawer(); }
+  if (a === "saveR") {
+    S.ib.custom[key] = $("edR").value.trim(); S.ib.edit = null;
+    if (b.dataset.send) { if (key.startsWith("c")) S.ib.calls[key.slice(1)] = "ok"; else S.ib.ready[key] = "sent"; }
+    return renderDrawer();
+  }
+}
+$("scrim").addEventListener("click", closeDrawer);
+
 /* ---------- Deck layout ---------- */
 const visible = () => S.order.filter((id) => !S.done[id]);
 const stackT = (i) => `translate3d(0, ${i * 22}px, ${-i * 60}px) scale(${1 - i * 0.05})`;
@@ -532,7 +767,7 @@ function countDoneBefore(id) { const idx = S.order.indexOf(id); return S.order.s
 function act(id, kind) {
   if (!id || S.done[id]) return;
   const it = ITEMS[id];
-  if (kind === "primary" && id === "inbox") { S.inbox.spam = S.inbox.ready = true; }
+  if (kind === "primary" && id === "inbox") { bulk("spam"); bulk("ready"); }
   const text = kind === "snooze" ? `${it.app}: snoozed until tomorrow` : (typeof it.done === "function" ? it.done() : it.done);
   S.done[id] = { text, kind }; S.doneOrder.push(id);
   const el = els[id]; delete els[id];
@@ -548,7 +783,7 @@ function act(id, kind) {
 function undo(id) {
   if (!S.done[id]) return;
   delete S.done[id]; S.doneOrder = S.doneOrder.filter((x) => x !== id);
-  if (id === "inbox") S.inbox = {};
+  if (id === "inbox") S.ib = ibFresh();
   S.order = [id, ...S.order.filter((x) => x !== id)];
   update();
 }
@@ -660,6 +895,7 @@ function commands() {
   vis.forEach((id) => { const it = ITEMS[id]; list.push({ sec: "Act on your day", icon: it.primaryIcon, h: it.h, label: `${it.primary}`, hint: it.title, run: () => act(id, "primary") }); });
   vis.forEach((id) => { const it = ITEMS[id]; list.push({ sec: "Act on your day", icon: "clock", h: "#fbbf24", label: `Snooze: ${it.title}`, hint: "Until tomorrow", run: () => act(id, "snooze") }); });
   if (vis.length > 1) list.push({ sec: "Act on your day", icon: "clock", h: "#fbbf24", label: "Snooze everything until tomorrow", hint: plural(vis.length, "item", "items"), run: () => vis.forEach((id, i) => setTimeout(() => act(id, "snooze"), i * 140)) });
+  if (!S.done.inbox) list.push({ sec: "Act on your day", icon: "inbox", h: "#ff6a3d", label: "Review inbox items one by one", hint: "Spam, replies, your call", run: () => openDrawer("spam") });
   list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "What happened over the weekend?", hint: "Archie", run: () => island("Archie would answer here, in the side panel", null, "info") });
   list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "Write a post about the Opale lamp", hint: "Archie", run: () => island("Archie would open with a draft ready", null, "info") });
   list.push({ sec: "Go to", icon: "inbox", label: "Inbox", hint: "G then I", run: () => island("Inbox isn't part of this prototype", null, "info") });
@@ -698,7 +934,7 @@ $("cmdBtn").addEventListener("click", openPal);
 /* ---------- Misc ---------- */
 function replay() {
   Object.values(els).forEach((e) => e.remove()); Object.keys(els).forEach((k) => delete els[k]);
-  S.order = ["inbox", "post", "spike", "gap", "kpi"]; S.done = {}; S.doneOrder = []; S.inbox = {}; S.pick = 0; S.start = Date.now(); S.celebrated = false;
+  S.order = ["inbox", "post", "spike", "gap", "kpi"]; S.done = {}; S.doneOrder = []; S.ib = ibFresh(); S.pick = 0; S.start = Date.now(); S.celebrated = false;
   update();
 }
 function countUp(el) {
@@ -723,15 +959,7 @@ function confetti() {
 document.addEventListener("click", (e) => {
   const u = e.target.closest("[data-undo]"); if (u) return undo(u.dataset.undo);
   const n = e.target.closest("[data-nav]"); if (n) return island(`${n.dataset.nav} isn't part of this prototype`, null, "info");
-  const lane = e.target.closest("[data-lane]");
-  if (lane) {
-    const k = lane.dataset.lane; if (S.inbox[k]) return;
-    S.inbox[k] = true;
-    const card = lane.closest(".card"); card.querySelector(".c-body").innerHTML = body("inbox");
-    if (S.inbox.spam && S.inbox.ready) setTimeout(() => act("inbox", "primary"), 650);
-    else island(k === "spam" ? "9 spam comments hidden" : "21 replies sent", () => { delete S.inbox[k]; card.querySelector(".c-body").innerHTML = body("inbox"); }, "ok");
-    return;
-  }
+  const ibb = e.target.closest("[data-ib]"); if (ibb) return ibClick(ibb);
   const pk = e.target.closest("[data-pick]");
   if (pk) { S.pick = +pk.dataset.pick; pk.closest(".drafts").querySelectorAll(".draft").forEach((d, i) => { d.classList.toggle("sel", i === S.pick); d.setAttribute("aria-pressed", i === S.pick); }); return; }
   const b = e.target.closest("[data-act]"); if (!b) return;
@@ -744,6 +972,7 @@ document.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); return $("pal").classList.contains("open") ? closePal() : openPal(); }
   if ($("pal").classList.contains("open")) { if (e.key === "Escape") closePal(); return; }
+  if ($("drawer").classList.contains("open")) { if (e.key === "Escape") { if (S.ib.edit) { S.ib.edit = null; renderDrawer(); } else closeDrawer(); } return; }
   if (e.target.closest?.("input, textarea") || e.metaKey || e.ctrlKey || e.altKey) return;
   const top = visible()[0];
   if (e.key === "/") { e.preventDefault(); openPal(); }

@@ -299,6 +299,7 @@ h1 { margin:0; font-size:clamp(28px, 3vw, 40px); line-height:1.15; font-weight:6
 .tweaks { display:flex; flex-wrap:wrap; gap:6px; }
 .chipb { height:30px; padding:0 11px; border-radius:999px; box-shadow:inset 0 0 0 1px var(--line2); font-size:13px; display:inline-flex; align-items:center; gap:6px; }
 .chipb:hover { background:var(--glass2); }
+span.chipb, span.chipb:hover { background:var(--card2); box-shadow:none; color:var(--muted); }
 .chipb.on { background:var(--fg); color:#fff; box-shadow:none; }
 .chipb svg.i { width:14px; height:14px; }
 .whens { display:flex; flex-direction:column; gap:6px; }
@@ -584,11 +585,14 @@ const ITEMS = {
   kpi: { group: "good", short: "Instagram engagement +12%", app: "Analytics", icon: "chart", h: "#34d399", meta: "Instagram · last 30 days", title: "Instagram engagement is up 12%",
     why: "Reels drove 64% of it. Evening posts did twice as well as morning ones.", primary: "Add to report", primaryIcon: "layers",
     done: "Added to Monthly Instagram review", mins: 1 },
+  top: { group: "good", short: "Top post: workshop Reel", app: "Analytics", icon: "trending", h: "#7c6cf0", meta: "Instagram · posted Thursday 18:30", title: "Your workshop Reel did 3× your average",
+    why: "Behind-the-scenes Reels are your best format this month. People save them to come back to.", primary: "Make a similar post", primaryIcon: "pen",
+    alt: ["Reuse it on TikTok", "Workshop Reel reused on TikTok, goes out tomorrow 18:30"], done: "Similar post created", mins: 2 },
   review: { group: "good", short: "New 5-star review", app: "Reviews", icon: "star", h: "#fbbf24", meta: "Google · Lyon store · just now", title: "Nadia left a 5-star review",
     why: "Reviews answered within a day bring twice as many repeat visits.", primary: "Send thank-you", primaryIcon: "send",
     done: "Thanked Nadia for her review", mins: 1 },
 };
-const S = { order: ["inbox", "post", "spike", "gap", "kpi"], done: {}, doneOrder: [], inbox: {}, pick: 0, start: Date.now(), celebrated: false };
+const S = { order: ["inbox", "post", "spike", "gap", "kpi", "top"], done: {}, doneOrder: [], inbox: {}, pick: 0, start: Date.now(), celebrated: false };
 
 function body(id) {
   if (id === "inbox") return `
@@ -613,7 +617,7 @@ function body(id) {
   }
   if (id === "gap") return `
     <div class="week">${[["Mon", 2], ["Tue", 1], ["Wed", 0], ["Thu", 2], ["Fri", 1]].map(([d, n]) => `<div class="day${n ? "" : " gap"}"><b>${d}</b><span class="muted">${n ? plural(n, "post", "posts") : "Empty"}</span><div class="dots">${"<i></i>".repeat(n)}</div></div>`).join("")}</div>
-    ${S.done.spike ? "" : `<div class="conn">${ic("radio")}<span>Or post about the viral Opale video. Your agent can draft it from the mention spike.</span><button class="tbtn line" data-act="compose">Draft it</button></div>`}
+    ${S.done.spike && S.done.top ? "" : `<div class="conn">${ic("sparkles")}<span>Or start from today's signals. Your agent drafts it for you.</span>${S.done.spike ? "" : `<button class="tbtn line" data-act="compose" data-src="spike">About the viral Opale video</button>`}${S.done.top ? "" : `<button class="tbtn line" data-act="compose" data-src="top">Like your top Reel</button>`}</div>`}
     <div class="drafts">${DRAFTS.map(([src, t, m], i) => `<button class="draft${S.pick === i ? " sel" : ""}" data-pick="${i}" aria-pressed="${S.pick === i}"><img src="${src}" alt="" draggable="false"><span><b>${t}</b><small>${m}</small></span><span class="tick">${ic("check")}</span></button>`).join("")}</div>`;
   if (id === "kpi") return `
     <div class="stats3"><div class="stat"><small>Engagements</small><b>4,218</b><em>+12%</em></div><div class="stat"><small>Reach</small><b>38.6K</b><em>+8%</em></div><div class="stat"><small>Video views</small><b>12.9K</b><em>+21%</em></div></div>
@@ -623,6 +627,12 @@ function body(id) {
       <path d="M0,96 C40,94 80,92 120,90 S200,84 240,80 S290,76 300,74" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="1.5" stroke-dasharray="4 4" vector-effect="non-scaling-stroke"/>
       <path class="ln" pathLength="1" d="M0,92 C30,90 50,84 80,86 S130,70 160,64 S220,40 250,30 S285,14 300,10" fill="none" stroke="#34d399" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
     </svg>`;
+  if (id === "top") return `
+    <div class="post"><img src="assets/post-atelier.jpg" alt="Workshop Reel" draggable="false">
+      <div><div class="post-h"><span class="net ig">IG</span><b>Maison Lumen</b><span class="muted">Reel · 18 s</span></div>
+        <p>A morning at the workshop. Which step surprised you most?</p>
+        <div class="stats3" style="margin-top:14px"><div class="stat"><small>Reach</small><b>14.2K</b><em>3.1× average</em></div><div class="stat"><small>Saves</small><b>412</b><em>5× average</em></div><div class="stat"><small>Shares</small><b>186</b><em>4× average</em></div></div></div></div>
+    <div><span class="lbl">Why it worked</span><div class="tweaks"><span class="chipb">${ic("clock")}Under 20 seconds</span><span class="chipb">Posted after 18:00</span><span class="chipb">Behind the scenes</span><span class="chipb">Question in the caption</span></div></div>`;
   if (id === "review") return `
     <div class="quote"><div class="post-h"><span class="net g">G</span><b>Nadia K.</b><span class="stars" aria-label="5 out of 5 stars">${ic("star").repeat(5)}</span></div>
       <p>“Lovely shop, and the Opale is even better in person. Thank you Julie for the advice!”</p></div>
@@ -834,7 +844,7 @@ function renderPane(anim = true) {
   p.dataset.id = id || "";
   if (!id) { p.innerHTML = skyHTML(); return; }
   const it = ITEMS[id], d = S.done[id]; p.style.setProperty("--h", it.h);
-  if (id === "spike" && S.cmp && !d) { p.innerHTML = composerHTML(); return; }
+  if (S.cmp && S.cmp.src === id && !d) { p.innerHTML = composerHTML(); return; }
   const order = queueOrder().filter((x) => !S.done[x]), pos = order.indexOf(id);
   p.innerHTML = `
     <div class="c-head"><span class="app-chip">${ic(it.icon)}${it.app}</span><span class="c-meta">${it.meta}</span><span class="c-pos">${d ? "" : `${pos + 1} of ${order.length}`}</span></div>
@@ -845,6 +855,7 @@ function renderPane(anim = true) {
     ${d ? "" : `<div class="c-foot"><span class="c-hint">Nothing goes out until you confirm</span>
       <button class="btn btn-g" data-act="snooze">${ic("clock")}Snooze to tomorrow 9:00</button>
       ${it.secondary ? `<button class="btn btn-g" data-act="toast" data-msg="${esc(it.secondary[1])}">${it.secondary[0]}</button>` : ""}
+      ${it.alt ? `<button class="btn btn-g" data-act="alt">${it.alt[0]}</button>` : ""}
       <button class="btn btn-p" data-act="primary">${ic(it.primaryIcon)}${esc(primaryLabel(id))}</button></div>`}`;
 }
 function skyHTML() {
@@ -858,38 +869,52 @@ function skyHTML() {
 function select(id) { if (!id || id === S.sel) return; S.sel = id; renderQueue(); renderPane(); }
 
 /* ---------- Draft a post ---------- */
-const ANGLES = [
-  { name: "Where to buy", text: "You've been asking where to find the Opale lamp. It's in all our stores and online, in white and brass.", short: "The Opale is in stock, in store and online." },
-  { name: "The viral video", text: "Thank you @deco.lou for the love! The Opale lamp from the video is in stock, online and in our stores.", short: "Thanks @deco.lou! The Opale is in stock." },
-  { name: "Store invite", text: "Come see the Opale in person this week. Our Lyon and Paris stores are open Tuesday to Saturday, 10:00 to 19:00.", short: "See the Opale in store this week." },
-];
-const WHENS = [["wed", "Wednesday 10:00", "Fills your empty Wednesday. Wednesday posts reach 18% more people.", true], ["eve", "Today 18:00", "While it's hot. Your evening posts do twice as well."], ["draft", "Keep as a draft", "Decide later. It waits in Publishing."]];
+const SRC = {
+  spike: { meta: "From the mention spike in Listening", title: "Draft a post about the Opale", img: "assets/post-lamp.jpg", noun: "Opale post", back: "Back to the spike",
+    ctx: () => `<span>${netB("TT")}<b>@deco.lou</b> video, 48K views</span><span>${ic("inbox")}<b>23</b> “where to buy?” questions</span><span>${ic("layers")}<b>Opale photo</b> from your library</span>`,
+    extra: ["Add the shop link", "maisonlumen.com", " Shop it: maisonlumen.com/opale"], ask: " White or brass, which one would you pick?",
+    angles: [
+      { name: "Where to buy", text: "You've been asking where to find the Opale lamp. It's in all our stores and online, in white and brass.", short: "The Opale is in stock, in store and online." },
+      { name: "The viral video", text: "Thank you @deco.lou for the love! The Opale lamp from the video is in stock, online and in our stores.", short: "Thanks @deco.lou! The Opale is in stock." },
+      { name: "Store invite", text: "Come see the Opale in person this week. Our Lyon and Paris stores are open Tuesday to Saturday, 10:00 to 19:00.", short: "See the Opale in store this week." } ] },
+  top: { meta: "Inspired by your top post", title: "Make a post like your top Reel", img: "assets/post-atelier.jpg", noun: "new Reel", back: "Back to the top post",
+    ctx: () => `<span>${netB("IG")}<b>Workshop Reel</b> 3.1× your average reach</span><span>${ic("clock")}<b>Under 20 s</b>, posted at 18:30</span><span>${ic("sparkles")}<b>Question</b> in the caption</span>`,
+    extra: ["Add #behindthescenes", "#behindthescenes", " #behindthescenes #handmade"], ask: " What should we show you next?",
+    angles: [
+      { name: "Same format, new piece", text: "Behind the scenes, part 2: how we shape the brass base of the Opale, by hand.", short: "Behind the scenes, part 2: the Opale brass base." },
+      { name: "Meet the maker", text: "Meet Julie, who has been assembling our lamps for 12 years. Here's her favorite step.", short: "Meet Julie, our lamp maker." },
+      { name: "Before and after", text: "From a sheet of brass to the Opale on your table. 3 days, 14 steps, one pair of hands.", short: "From brass sheet to Opale, in 14 steps." } ] },
+};
+const COMPOSE = Object.keys(SRC);
+const WHENS = [["wed", "Wednesday 10:00", "Fills your empty Wednesday. Wednesday posts reach 18% more people.", true], ["eve", "Today 18:00", "Your evening posts do twice as well."], ["draft", "Keep as a draft", "Decide later. It waits in Publishing."]];
 const NETNAME = { IG: "Instagram", FB: "Facebook", TT: "TikTok", LI: "LinkedIn" };
-const cmpFresh = () => ({ angle: 0, text: ANGLES[0].text, nets: { IG: true, FB: true, TT: false, LI: false }, when: "wed" });
-function openCompose() { S.cmp = S.cmp || cmpFresh(); S.sel = "spike"; renderQueue(); renderPane(); setTimeout(() => $("cmpText")?.focus(), 60); }
+const cmpFresh = (src) => ({ src, angle: 0, text: SRC[src].angles[0].text, nets: src === "top" ? { IG: true, FB: false, TT: true, LI: false } : { IG: true, FB: true, TT: false, LI: false }, when: S.done.gap ? "eve" : "wed" });
+function openCompose(src = "spike") { if (!S.cmp || S.cmp.src !== src) S.cmp = cmpFresh(src); S.sel = src; renderQueue(); renderPane(); setTimeout(() => $("cmpText")?.focus(), 60); }
 function cmpPrimary() { return S.cmp.when === "wed" ? "Schedule for Wed 10:00" : S.cmp.when === "eve" ? "Schedule for today 18:00" : "Save draft"; }
 function composerHTML() {
-  const c = S.cmp, nets = Object.entries(c.nets), first = nets.find(([, o]) => o)?.[0] || "IG";
-  return `<div class="c-head"><span class="app-chip" style="--h:#db2777">${ic("pen")}New post</span><span class="c-meta">From the mention spike in Listening</span><span class="c-pos"></span></div>
-  <h2 class="c-title">Draft a post about the Opale</h2>
-  <div class="ctx"><span class="ctx-l">Built from</span><span>${netB("TT")}<b>@deco.lou</b> video, 48K views</span><span>${ic("inbox")}<b>23</b> “where to buy?” questions</span><span>${ic("layers")}<b>Opale photo</b> from your library</span></div>
+  const c = S.cmp, cf = SRC[c.src], nets = Object.entries(c.nets), first = nets.find(([, o]) => o)?.[0] || "IG";
+  const whens = WHENS.filter(([k]) => k !== "wed" || !S.done.gap);
+  return `<div class="c-head"><span class="app-chip" style="--h:#db2777">${ic("pen")}New post</span><span class="c-meta">${cf.meta}</span><span class="c-pos"></span></div>
+  <h2 class="c-title">${cf.title}</h2>
+  <div class="ctx"><span class="ctx-l">Built from</span>${cf.ctx()}</div>
   <div class="cmp"><div class="cmp-l">
-    <div><span class="lbl">Angle</span><div class="seg2" role="tablist" aria-label="Angle">${ANGLES.map((a, i) => `<button class="${i === c.angle ? "on" : ""}" data-cmp="angle" data-v="${i}" role="tab" aria-selected="${i === c.angle}">${a.name}</button>`).join("")}</div></div>
+    <div><span class="lbl">Angle</span><div class="seg2" role="tablist" aria-label="Angle">${cf.angles.map((a, i) => `<button class="${i === c.angle ? "on" : ""}" data-cmp="angle" data-v="${i}" role="tab" aria-selected="${i === c.angle}">${a.name}</button>`).join("")}</div></div>
     <div><label class="lbl" for="cmpText">Caption</label><textarea id="cmpText">${esc(c.text)}</textarea>
-      <div class="cmp-row"><div class="tweaks"><button class="chipb" data-cmp="short">Shorter</button><button class="chipb" data-cmp="link">Add the shop link</button><button class="chipb" data-cmp="ask">Ask a question</button><button class="chipb" data-cmp="reset">${ic("undo")}Reset</button></div><span class="count" id="cmpCount">${c.text.length} / 2,200</span></div></div>
+      <div class="cmp-row"><div class="tweaks"><button class="chipb" data-cmp="short">Shorter</button><button class="chipb" data-cmp="link">${cf.extra[0]}</button><button class="chipb" data-cmp="ask">Ask a question</button><button class="chipb" data-cmp="reset">${ic("undo")}Reset</button></div><span class="count" id="cmpCount">${c.text.length} / 2,200</span></div></div>
     <div><span class="lbl">Post on</span><div class="tweaks">${nets.map(([n, on]) => `<button class="chipb${on ? " on" : ""}" data-cmp="net" data-v="${n}" aria-pressed="${on}">${on ? ic("check") : ""}${NETNAME[n]}</button>`).join("")}</div></div>
-    <div><span class="lbl">When</span><div class="whens">${WHENS.map(([k, t, sub, rec]) => `<button class="when-o${c.when === k ? " on" : ""}" data-cmp="when" data-v="${k}" aria-pressed="${c.when === k}"><span class="dot2"></span><span><b>${t}</b><small>${sub}</small></span>${rec ? `<span class="rec">Suggested</span>` : ""}</button>`).join("")}</div></div>
+    <div><span class="lbl">When</span><div class="whens">${whens.map(([k, t, sub, rec]) => `<button class="when-o${c.when === k ? " on" : ""}" data-cmp="when" data-v="${k}" aria-pressed="${c.when === k}"><span class="dot2"></span><span><b>${t}</b><small>${sub}</small></span>${rec ? `<span class="rec">Suggested</span>` : ""}</button>`).join("")}</div></div>
   </div>
-  <div class="pv-wrap"><span class="lbl">Preview on ${NETNAME[first]}</span><div class="pv"><div class="pv-h">${netB(first)}<b>maisonlumen</b></div><img src="assets/post-lamp.jpg" alt="Opale lamp" draggable="false"><p><b>maisonlumen</b><span id="pvText">${esc(c.text)}</span></p></div></div></div>
-  <div class="c-foot"><button class="btn btn-g" data-cmp="cancel">${ic("left")}Back to the spike</button><span class="c-hint" style="margin-left:auto;margin-right:0">${c.when === "wed" ? "This also fills your empty Wednesday" : ""}</span><button class="btn btn-p" data-cmp="go">${ic(c.when === "draft" ? "pen" : "calendar")}${cmpPrimary()}</button></div>`;
+  <div class="pv-wrap"><span class="lbl">Preview on ${NETNAME[first]}</span><div class="pv"><div class="pv-h">${netB(first)}<b>maisonlumen</b></div><img src="${cf.img}" alt="" draggable="false"><p><b>maisonlumen</b><span id="pvText">${esc(c.text)}</span></p></div></div></div>
+  <div class="c-foot"><button class="btn btn-g" data-cmp="cancel">${ic("left")}${cf.back}</button><span class="c-hint" style="margin-left:auto;margin-right:0">${c.when === "wed" ? "This also fills your empty Wednesday" : ""}</span><button class="btn btn-p" data-cmp="go">${ic(c.when === "draft" ? "pen" : "calendar")}${cmpPrimary()}</button></div>`;
 }
 function cmpClick(b) {
   const a = b.dataset.cmp, v = b.dataset.v, c = S.cmp; if (!c) return;
-  if (a === "angle") { c.angle = +v; c.text = ANGLES[c.angle].text; }
-  if (a === "short") c.text = ANGLES[c.angle].short;
-  if (a === "link" && !c.text.includes("maisonlumen.com")) c.text = `${c.text.trim()} Shop it: maisonlumen.com/opale`;
-  if (a === "ask" && !c.text.includes("which one")) c.text = `${c.text.trim()} White or brass, which one would you pick?`;
-  if (a === "reset") c.text = ANGLES[c.angle].text;
+  const cf = SRC[c.src];
+  if (a === "angle") { c.angle = +v; c.text = cf.angles[c.angle].text; }
+  if (a === "short") c.text = cf.angles[c.angle].short;
+  if (a === "link" && !c.text.includes(cf.extra[1])) c.text = `${c.text.trim()}${cf.extra[2]}`;
+  if (a === "ask" && !c.text.includes(cf.ask.trim())) c.text = `${c.text.trim()}${cf.ask}`;
+  if (a === "reset") c.text = cf.angles[c.angle].text;
   if (a === "net") { c.nets[v] = !c.nets[v]; if (!Object.values(c.nets).some(Boolean)) c.nets[v] = true; }
   if (a === "when") c.when = v;
   if (a === "cancel") { S.cmp = null; return renderPane(); }
@@ -897,12 +922,13 @@ function cmpClick(b) {
   renderPane(false);
 }
 function publishDraft() {
-  const c = S.cmp, nets = Object.entries(c.nets).filter(([, o]) => o).map(([n]) => NETNAME[n]).join(" and ");
+  const c = S.cmp, cf = SRC[c.src], nets = Object.entries(c.nets).filter(([, o]) => o).map(([n]) => NETNAME[n]).join(" and ");
+  const Noun = cf.noun[0].toUpperCase() + cf.noun.slice(1);
   S.cmp = null;
-  if (c.when === "draft") return act("spike", "primary", { text: "Opale post saved as a draft in Publishing" });
-  const when = c.when === "wed" ? "Wednesday 10:00" : "today 18:00", extra = { text: `Opale post scheduled for ${when} on ${nets}` };
-  if (c.when === "wed" && !S.done.gap) { extra.linked = "gap"; extra.also = { id: "gap", text: "Filled by your Opale post, Wednesday 10:00" }; }
-  act("spike", "primary", extra);
+  if (c.when === "draft") return act(c.src, "primary", { text: `${Noun} saved as a draft in Publishing` });
+  const when = c.when === "wed" ? "Wednesday 10:00" : "today 18:00", extra = { text: `${Noun} scheduled for ${when} on ${nets}` };
+  if (c.when === "wed" && !S.done.gap) { extra.linked = "gap"; extra.also = { id: "gap", text: `Filled by your ${cf.noun}, Wednesday 10:00` }; }
+  act(c.src, "primary", extra);
 }
 document.addEventListener("input", (e) => {
   if (e.target.id !== "cmpText" || !S.cmp) return;
@@ -987,12 +1013,13 @@ function arrive() {
 let palItems = [], palIdx = 0;
 function commands() {
   const vis = visible(), list = [];
-  vis.forEach((id) => { const it = ITEMS[id]; list.push({ sec: "Act on your day", icon: it.primaryIcon, h: it.h, label: `${it.primary}`, hint: it.title, run: () => (id === "spike" ? openCompose() : act(id, "primary")) }); });
+  vis.forEach((id) => { const it = ITEMS[id]; list.push({ sec: "Act on your day", icon: it.primaryIcon, h: it.h, label: `${it.primary}`, hint: it.title, run: () => (COMPOSE.includes(id) ? openCompose(id) : act(id, "primary")) }); });
   vis.forEach((id) => { const it = ITEMS[id]; list.push({ sec: "Act on your day", icon: "clock", h: "#fbbf24", label: `Snooze: ${it.title}`, hint: "Until tomorrow", run: () => act(id, "snooze") }); });
   if (vis.length > 1) list.push({ sec: "Act on your day", icon: "clock", h: "#fbbf24", label: "Snooze everything until tomorrow", hint: plural(vis.length, "item", "items"), run: () => vis.forEach((id, i) => setTimeout(() => act(id, "snooze"), i * 140)) });
   if (!S.done.inbox) list.push({ sec: "Act on your day", icon: "inbox", h: "#ff6a3d", label: "Review inbox items one by one", hint: "Spam, replies, your call", run: () => openDrawer("spam") });
   list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "What happened over the weekend?", hint: "Archie", run: () => island("Archie would answer here, in the side panel", null, "info") });
-  list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "Write a post about the Opale lamp", hint: "From the mention spike", run: openCompose });
+  list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "Write a post about the Opale lamp", hint: "From the mention spike", run: () => openCompose("spike") });
+  if (!S.done.top) list.push({ sec: "Ask your agents", icon: "sparkles", h: "#8b7bff", label: "Make a post like my top Reel", hint: "From your top post", run: () => openCompose("top") });
   list.push({ sec: "Go to", icon: "inbox", label: "Inbox", hint: "G then I", run: () => island("Inbox isn't part of this prototype", null, "info") });
   list.push({ sec: "Go to", icon: "calendar", label: "Publishing calendar", hint: "G then C", run: () => island("Calendar isn't part of this prototype", null, "info") });
   list.push({ sec: "Go to", icon: "layers", label: "Classic Today view", hint: "Design system version", run: () => (location.href = "index.html") });
@@ -1028,7 +1055,7 @@ $("cmdBtn").addEventListener("click", openPal);
 
 /* ---------- Misc ---------- */
 function replay() {
-  S.order = ["inbox", "post", "spike", "gap", "kpi"]; S.done = {}; S.doneOrder = []; S.ib = ibFresh(); S.pick = 0; S.start = Date.now(); S.celebrated = false; S.cmp = null; S.sel = "inbox";
+  S.order = ["inbox", "post", "spike", "gap", "kpi", "top"]; S.done = {}; S.doneOrder = []; S.ib = ibFresh(); S.pick = 0; S.start = Date.now(); S.celebrated = false; S.cmp = null; S.sel = "inbox";
   update();
 }
 function countUp(el) {
@@ -1060,8 +1087,9 @@ document.addEventListener("click", (e) => {
   const cm = e.target.closest("[data-cmp]"); if (cm) return cmpClick(cm);
   const b = e.target.closest("[data-act]"); if (!b) return;
   const id = $("pane").dataset.id;
-  if (b.dataset.act === "primary") id === "spike" ? openCompose() : act(id, "primary");
-  if (b.dataset.act === "compose") openCompose();
+  if (b.dataset.act === "primary") COMPOSE.includes(id) ? openCompose(id) : act(id, "primary");
+  if (b.dataset.act === "compose") openCompose(b.dataset.src || "spike");
+  if (b.dataset.act === "alt" && ITEMS[id]?.alt) act(id, "primary", { text: ITEMS[id].alt[1] });
   if (b.dataset.act === "next") select(nextAfter(id));
   if (b.dataset.act === "snooze") act(id, "snooze");
   if (b.dataset.act === "toast") island(b.dataset.msg, null, "info");

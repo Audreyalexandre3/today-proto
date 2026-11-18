@@ -1,0 +1,372 @@
+<!doctype html>
+<!-- mode: html-prototype · design-guidelines · DS: @agorapulse/ui-theme@22.0.7 + ui-symbol@22.0.0 via jsDelivr
+     Shell = O5 app rail + O3 top bar + P4 tabs. Content = P11 grey-bg ground, S1 section cards, grey-05 inset tiles.
+     Authored borders are grey-20 (house rule); DS components keep their own grey-10. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today · Agorapulse prototype</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@agorapulse/ui-theme@22.0.7/assets/desktop_variables.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@agorapulse/ui-theme@22.0.7/assets/style/css-ui/font-face.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@agorapulse/ui-symbol@22.0.0/icons/ap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@agorapulse/ui-theme@22.0.7/assets/style/css-ui/index.css">
+<style>
+  *, *::before, *::after { box-sizing:border-box; }
+  html,body { margin:0; height:100%; overflow:hidden; }
+  body { background:var(--ref-color-grey-bg); color:var(--ref-color-grey-100); font-family:var(--ref-font-family); font-size:var(--ref-font-size-sm); -webkit-font-smoothing:antialiased; }
+  h1,h2,h3,p { margin:0; }
+  .muted { color:var(--ref-color-grey-80); }
+  .row { display:flex; align-items:center; gap:var(--ref-spacing-xxs); min-width:0; }
+  .spacer { flex:1; min-width:0; }
+  .stack { display:flex; flex-direction:column; gap:var(--ref-spacing-xxs); min-width:0; }
+  [hidden] { display:none !important; }
+  .ap-icon-sparkles-mermaid { background:linear-gradient(135deg,var(--ref-color-mermaid-gradient-from),var(--ref-color-mermaid-gradient-to)); }
+
+  .app { display:flex; height:100vh; }
+
+  /* O5 app rail */
+  .app-rail { width:180px; height:100vh; display:flex; flex-direction:column; background:var(--ref-color-grey-bg); border-right:1px solid var(--ref-color-grey-20); flex-shrink:0; transition:width 250ms cubic-bezier(0.4,0,0.3,1); position:relative; }
+  .app-rail-header { padding:var(--ref-spacing-xxs); border-bottom:1px solid var(--ref-color-grey-20); position:relative; display:flex; align-items:center; height:53px; }
+  .app-rail-logo { display:block; height:36px; margin-left:var(--ref-spacing-xxxs); object-fit:contain; object-position:left center; }
+  .app-rail-mark { display:none; }
+  .app-rail-toggle { position:absolute; right:-1px; top:50%; transform:translateY(-50%); width:24px; height:24px; display:grid; place-items:center; padding:0; background:var(--ref-color-grey-bg); border:1px solid var(--ref-color-grey-20); border-right:0; border-radius:var(--ref-border-radius-sm) 0 0 var(--ref-border-radius-sm); cursor:pointer; opacity:0; transition:opacity 70ms; color:var(--ref-color-grey-100); }
+  .app-rail:hover .app-rail-toggle, .app-rail-toggle:focus-visible { opacity:1; }
+  .app-rail-items { flex:1; overflow-y:auto; padding:var(--ref-spacing-xxs); display:flex; flex-direction:column; gap:var(--ref-spacing-xxs); }
+  .app-rail-item { display:flex; align-items:center; gap:var(--ref-spacing-xxs); height:36px; padding:var(--ref-spacing-xxs); border:0; border-radius:var(--ref-border-radius-sm); background:none; width:100%; font:inherit; font-size:var(--ref-font-size-sm); color:var(--ref-color-grey-100); text-decoration:none; text-align:left; cursor:pointer; position:relative; }
+  .app-rail-item:hover { background:var(--ref-color-electric-blue-10); }
+  .app-rail-item[aria-current="page"] { background:var(--ref-color-electric-blue-20); color:var(--ref-color-electric-blue-150); font-weight:var(--ref-font-weight-bold); }
+  .app-rail-chevron { margin-left:auto; }
+  .app-rail-icon { position:relative; display:inline-flex; }
+  .app-rail-dot { position:absolute; top:-4px; right:-5px; width:10px; height:10px; border-radius:50%; background:var(--ref-color-orange-100); border:2px solid var(--ref-color-grey-bg); }
+  .app-rail-counter { margin-left:auto; }
+  .app-rail-create { padding:var(--ref-spacing-xxs); }
+  .app-rail-create .ap-button { width:100%; }
+  .app-rail-options { border-top:1px solid var(--ref-color-grey-20); padding:var(--ref-spacing-xxs); display:flex; flex-direction:column; gap:var(--ref-spacing-xxxs); }
+  .app-rail-user { display:flex; align-items:center; gap:var(--ref-spacing-xxs); height:40px; margin-top:var(--ref-spacing-xxxs); padding:var(--ref-spacing-xxs); border:1px solid var(--ref-color-grey-20); border-radius:var(--ref-border-radius-sm); background:none; cursor:pointer; color:var(--ref-color-grey-100); font:inherit; width:100%; text-align:left; }
+  .app-rail.is-collapsed { width:64px; }
+  .app-rail.is-collapsed .app-rail-header { justify-content:center; }
+  .app-rail.is-collapsed .app-rail-logo { display:none; }
+  .app-rail.is-collapsed .app-rail-mark { display:block; }
+  .app-rail.is-collapsed .app-rail-toggle { left:50%; right:auto; transform:translate(-50%,-50%); border-right:1px solid var(--ref-color-grey-20); border-radius:var(--ref-border-radius-sm); }
+  .app-rail.is-collapsed:hover .app-rail-mark { opacity:0; }
+  .app-rail.is-collapsed .app-rail-items, .app-rail.is-collapsed .app-rail-options { align-items:center; }
+  .app-rail.is-collapsed .app-rail-items .app-rail-item { width:48px; height:48px; justify-content:center; padding:0; }
+  .app-rail.is-collapsed .app-rail-item > span:not(.app-rail-icon):not(.ap-counter), .app-rail.is-collapsed .app-rail-chevron { display:none; }
+  .app-rail.is-collapsed .app-rail-options .app-rail-item { width:48px; justify-content:center; }
+  .app-rail.is-collapsed .app-rail-counter { position:absolute; top:2px; right:4px; margin:0; }
+  .app-rail.is-collapsed .app-rail-create { display:flex; justify-content:center; }
+  .app-rail.is-collapsed .app-rail-create .ap-button { width:36px; padding:var(--ref-spacing-xxs) 0; justify-content:center; }
+  .app-rail.is-collapsed .app-rail-create .ap-button span { display:none; }
+  .app-rail.is-collapsed .app-rail-user { width:40px; padding:0; justify-content:center; }
+  .app-rail.is-collapsed .app-rail-user .ap-caption { display:none; }
+
+  /* O3 top bar + P4 tabs */
+  .main { display:flex; flex-direction:column; min-width:0; flex:1; height:100vh; }
+  .page-header { height:60px; padding:0 var(--ref-spacing-md); display:flex; align-items:center; justify-content:space-between; gap:var(--ref-spacing-sm); background:var(--ref-color-white); border-bottom:1px solid var(--ref-color-grey-20); flex-shrink:0; }
+  .page-header-left, .page-header-right { display:flex; align-items:center; gap:var(--ref-spacing-xxs); min-width:0; }
+  .page-header-sep { width:1px; height:24px; background:var(--ref-color-grey-20); margin:0 var(--ref-spacing-xxxs); }
+  .tabs-row { background:var(--ref-color-white); border-bottom:1px solid var(--ref-color-grey-20); padding:0 var(--ref-spacing-md); flex-shrink:0; }
+  .tabs-row .ap-tabs-tab .ap-counter { margin-left:var(--ref-spacing-xxs); }
+
+  /* Content: P11 ground, P5 wide cap, P7 padding */
+  .scroll { flex:1; overflow:auto; padding:var(--ref-spacing-sm) var(--ref-spacing-sm) 96px; }
+  .wrap { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:var(--ref-spacing-sm); align-items:start; }
+  .feed, .side { display:flex; flex-direction:column; gap:var(--ref-spacing-sm); min-width:0; }
+  .intro { display:flex; flex-direction:column; gap:var(--ref-spacing-xxxs); }
+  .group { display:flex; flex-direction:column; gap:var(--ref-spacing-xs); }
+  .group-head { display:flex; align-items:center; gap:var(--ref-spacing-xxs); }
+
+  /* S1 section card = one action item */
+  .ap-card.item, .ap-card.sec { padding:var(--ref-spacing-sm); display:flex; flex-direction:column; gap:var(--ref-spacing-sm); border:1px solid var(--ref-color-grey-20); border-radius:var(--ref-border-radius-md); }
+  .item-head { display:flex; align-items:flex-start; gap:var(--ref-spacing-xs); }
+  .item-icon { width:36px; height:36px; border-radius:var(--ref-border-radius-md); background:var(--ref-color-grey-05); display:grid; place-items:center; flex:none; }
+  .item-icon > i { font-size:18px; }
+  .why { display:flex; gap:var(--ref-spacing-xxs); align-items:flex-start; }
+  .why > i { font-size:14px; margin-top:2px; flex:none; }
+  .item-foot { display:flex; align-items:center; gap:var(--ref-spacing-xs); flex-wrap:wrap; }
+  .item-foot .actions { margin-left:auto; display:flex; gap:var(--ref-spacing-xs); align-items:center; flex-wrap:wrap; }
+
+  /* grey-05 inset tiles inside a white surface (E2 metric tile: name in text) */
+  .tiles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--ref-spacing-xs); }
+  .tile { background:var(--ref-color-grey-05); border-radius:var(--ref-border-radius-md); padding:var(--ref-spacing-xs) var(--ref-spacing-sm); display:flex; flex-direction:column; gap:var(--ref-spacing-xxs); min-width:0; }
+  .tile .value { font-size:var(--ref-font-size-lg, 18px); font-weight:var(--ref-font-weight-bold); font-variant-numeric:tabular-nums; }
+  .tile .ap-button { align-self:flex-start; }
+  .tile.done { background:var(--ref-color-green-10); }
+  .delta { display:inline-flex; align-items:center; gap:2px; font-size:var(--ref-font-size-xs); }
+  .delta > i { font-size:12px; }
+  .delta.good { color:var(--ref-color-green-150); } .delta.bad { color:var(--ref-color-red-150); }
+
+  .post { display:flex; gap:var(--ref-spacing-sm); align-items:flex-start; }
+  .post img { width:96px; height:96px; border-radius:var(--ref-border-radius-sm); object-fit:cover; flex:none; }
+  .quote { background:var(--ref-color-grey-05); border-radius:var(--ref-border-radius-md); padding:var(--ref-spacing-xs) var(--ref-spacing-sm); display:flex; flex-direction:column; gap:var(--ref-spacing-xxxs); }
+  .week { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:var(--ref-spacing-xxs); }
+  .day { background:var(--ref-color-grey-05); border-radius:var(--ref-border-radius-sm); padding:var(--ref-spacing-xxs) var(--ref-spacing-xs); display:flex; flex-direction:column; min-width:0; }
+  .day.empty { background:var(--ref-color-white); border:1px dashed var(--ref-color-grey-20); }
+  .day.filled { background:var(--ref-color-green-10); }
+  .drafts { display:flex; flex-direction:column; gap:var(--ref-spacing-xs); }
+  .draft { display:flex; align-items:center; gap:var(--ref-spacing-xs); padding:var(--ref-spacing-xs) var(--ref-spacing-sm); border:1px solid var(--ref-color-grey-20); border-radius:var(--ref-border-radius-md); cursor:pointer; }
+  .draft:hover, .draft:has(input:checked) { border-color:var(--ref-color-electric-blue-100); }
+  .draft img { width:40px; height:40px; border-radius:var(--ref-border-radius-sm); object-fit:cover; }
+  .spark { width:100%; height:56px; display:block; }
+
+  .list-row { display:flex; align-items:center; gap:var(--ref-spacing-xs); padding:var(--ref-spacing-xxs) 0; min-height:44px; border-top:1px solid var(--ref-color-grey-20); }
+  .list-row:first-child { border-top:0; }
+  .list-row > i { font-size:16px; flex:none; }
+  .list-row .ok { color:var(--ref-color-green-100); }
+  .empty { text-align:center; padding:var(--ref-spacing-xl) var(--ref-spacing-md); display:flex; flex-direction:column; align-items:center; gap:var(--ref-spacing-xs); }
+  .empty > i { font-size:32px; color:var(--ref-color-green-100); }
+
+  .meter { height:8px; border-radius:var(--ref-border-radius-sm); background:var(--ref-color-grey-05); overflow:hidden; }
+  .meter > span { display:block; height:100%; background:var(--ref-color-green-100); transition:width .25s; }
+  .switch-row { display:flex; align-items:center; gap:var(--ref-spacing-xs); padding:var(--ref-spacing-xxs) 0; border-top:1px solid var(--ref-color-grey-20); }
+  .switch-row:first-of-type { border-top:0; }
+  .switch-row > i { font-size:16px; flex:none; }
+
+  a.ap-button { text-decoration:none; }
+  .snack { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:80; }
+  .proto-note { position:fixed; right:16px; bottom:16px; z-index:70; }
+
+  @media (max-width:1100px){ .wrap { grid-template-columns:1fr; } }
+  @media (max-width:720px){ .tiles, .week { grid-template-columns:1fr 1fr; } .page-header-right .ap-button { display:none; } .post { flex-direction:column; } }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="app-rail" aria-label="Main">
+    <div class="app-rail-header">
+      <img class="app-rail-logo" src="https://app.agorapulse.com/assets/img/agorapulse-logo.svg" width="95" alt="Agorapulse">
+      <img class="app-rail-mark" src="https://app.agorapulse.com/assets/img/organization/agorapulse-logo-3d-alpha.png" width="16" alt="Agorapulse">
+      <button type="button" class="app-rail-toggle" aria-label="Collapse navigation" aria-expanded="true"><i class="ap-icon-arrow-reduce"></i></button>
+    </div>
+    <div class="app-rail-items">
+      <a class="app-rail-item" href="#" aria-current="page" title="Today"><span class="app-rail-icon"><i class="ap-icon-view-grid"></i></span><span>Today</span><span class="ap-counter normal blue app-rail-counter" id="railCount">5</span></a>
+      <a class="app-rail-item" href="#" data-nav="Inbox" title="Inbox"><span class="app-rail-icon"><i class="ap-icon-feature-inbox"></i><span class="app-rail-dot" aria-label="Unread items"></span></span><span>Inbox</span></a>
+      <button type="button" class="app-rail-item" data-nav="Publishing" title="Publishing"><span class="app-rail-icon"><i class="ap-icon-feature-publishing"></i></span><span>Publishing</span><i class="ap-icon-chevron-down app-rail-chevron"></i></button>
+      <button type="button" class="app-rail-item" data-nav="Analytics" title="Analytics"><span class="app-rail-icon"><i class="ap-icon-feature-analytics"></i></span><span>Analytics</span><i class="ap-icon-chevron-down app-rail-chevron"></i></button>
+      <a class="app-rail-item" href="#" data-nav="Listening" title="Listening"><span class="app-rail-icon"><i class="ap-icon-feature-listening"></i></span><span>Listening</span></a>
+      <button type="button" class="app-rail-item" data-nav="Advocacy" title="Advocacy"><span class="app-rail-icon"><i class="ap-icon-feature-advocacy"></i></span><span>Advocacy</span><i class="ap-icon-chevron-down app-rail-chevron"></i></button>
+      <a class="app-rail-item" href="#" data-nav="Archie" title="Archie"><span class="app-rail-icon"><i class="ap-icon-feature-archie"></i></span><span>Archie</span></a>
+    </div>
+    <div class="app-rail-footer">
+      <div class="app-rail-create"><button type="button" class="ap-button stroked blue" data-nav="Composer" title="Create post"><i class="ap-icon-paper-plane"></i><span>Create post</span></button></div>
+      <div class="app-rail-options">
+        <button type="button" class="app-rail-item" data-nav="Notifications" title="Notifications"><span class="app-rail-icon"><i class="ap-icon-bell"></i></span><span>Notifications</span><span class="ap-counter notif app-rail-counter">3</span></button>
+        <button type="button" class="app-rail-item" data-nav="Help" title="Help &amp; resources"><span class="app-rail-icon"><i class="ap-icon-question"></i></span><span>Help &amp; resources</span></button>
+        <button type="button" class="app-rail-user" data-nav="User menu" title="Your account"><span class="ap-avatar size-24"><span class="ap-avatar-initials">CM</span></span><span class="ap-caption">Camille Martin</span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main">
+    <header class="page-header">
+      <div class="page-header-left">
+        <h1 class="ap-h2">Today</h1>
+        <span class="page-header-sep" aria-hidden="true"></span>
+        <span class="ap-caption muted">Monday, November 18 · Updated 2 min ago</span>
+      </div>
+      <div class="page-header-right">
+        <a class="ap-button stroked grey" href="surfaces.html"><span>See it in the AI assistant and team chat</span></a>
+        <button type="button" class="ap-icon-button" aria-label="Today settings" title="Today settings" data-nav="Today settings"><i class="ap-icon-cog"></i></button>
+      </div>
+    </header>
+    <div class="tabs-row"><div class="ap-tabs"><div class="ap-tabs-nav" role="tablist" id="tabs"></div></div></div>
+
+    <div class="scroll"><div class="wrap">
+      <main class="feed" id="feed"></main>
+      <aside class="side" aria-label="Summary">
+        <section class="ap-card sec">
+          <h2 class="ap-h3">Your day</h2>
+          <div class="stack"><p class="ap-body-bold" id="dayCount"></p><div class="meter" aria-hidden="true"><span id="meter"></span></div><p class="ap-caption muted" id="dayLeft"></p></div>
+        </section>
+        <section class="ap-card sec">
+          <div class="stack"><h2 class="ap-h3">What your agents did</h2><p class="ap-caption muted">Since Friday 18:00. Nothing was sent without your approval.</p></div>
+          <div>
+            <div class="list-row"><i class="ap-icon-feature-inbox"></i><p class="ap-body spacer">Sorted 42 inbox items</p></div>
+            <div class="list-row"><i class="ap-icon-pen"></i><p class="ap-body spacer">Drafted 21 replies</p></div>
+            <div class="list-row"><i class="ap-icon-feature-listening"></i><p class="ap-body spacer">Flagged 1 mention spike</p></div>
+            <div class="list-row"><i class="ap-icon-feature-publishing"></i><p class="ap-body spacer">Prepared 2 drafts for Wednesday</p></div>
+          </div>
+        </section>
+        <section class="ap-card sec">
+          <div class="stack"><h2 class="ap-h3">Where you get this</h2><p class="ap-caption muted">The same items reach you outside Agorapulse.</p></div>
+          <div>
+            <label class="switch-row"><i class="ap-icon-sparkles-mermaid"></i><span class="spacer"><span class="ap-body">Morning briefing in your AI assistant</span><br><span class="ap-caption muted">Every weekday at 9:00</span></span><span class="ap-toggle-container"><input type="checkbox" checked data-toggle="Morning briefing"><i></i></span></label>
+            <label class="switch-row"><i class="ap-icon-bell"></i><span class="spacer"><span class="ap-body">Team chat notifications</span><br><span class="ap-caption muted">Only items that need you</span></span><span class="ap-toggle-container"><input type="checkbox" checked data-toggle="Team chat notifications"><i></i></span></label>
+          </div>
+          <a class="ap-link small standalone" href="surfaces.html">Preview the three surfaces <i class="ap-icon-arrow-right"></i></a>
+        </section>
+      </aside>
+    </div></div>
+  </div>
+</div>
+
+<div class="ap-snackbar success snack" id="snack" hidden><div class="ap-snackbar-left"><i></i><span id="snackText"></span></div><div class="ap-snackbar-right" id="snackRight"></div></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+const icon = (n) => `<i class="ap-icon-${n}" aria-hidden="true"></i>`;
+
+const ITEMS = [
+  { id: "inbox", group: "you", icon: "feature-inbox", title: "42 inbox items since Friday", meta: "Inbox · 5 profiles", status: ["orange", "6 need you"],
+    why: "Your moderation assistant sorted them. 33 can be handled in bulk, 6 need your judgment.", done: "Inbox triaged: 9 spam hidden, 21 replies sent, 6 opened in Inbox" },
+  { id: "post", group: "you", icon: "feature-publishing", title: "1 post waiting for your approval", meta: "Publishing · Created by Thomas Bernard", status: ["orange", "Goes out Thu 10:00"],
+    why: "You approve posts on @maisonlumen.", done: "Post approved, it goes out Thursday 10:00" },
+  { id: "spike", group: "look", icon: "feature-listening", title: "Mentions up 310% since yesterday", meta: "Listening · Maison Lumen search", status: ["red", "Spike"],
+    why: "One TikTok about the Opale lamp is driving it. Most replies ask where to buy it.", done: "Draft post created from the mention spike" },
+  { id: "gap", group: "look", icon: "calendar", title: "Nothing scheduled on Wednesday", meta: "Publishing · This week", status: ["grey", "Gap"],
+    why: "Your Wednesday posts reach 18% more people than your average post.", done: "Wednesday 10:00 filled with a draft" },
+  { id: "kpi", group: "good", icon: "feature-analytics", title: "Engagements up 12% this month", meta: "Analytics · Instagram · Last 30 days", status: ["green", "Good news"],
+    why: "Reels drove 64% of engagements. Posts after 18:00 did twice as well as morning posts.", done: "Instagram summary added to Monthly Instagram review" },
+];
+const GROUPS = [["you", "Needs you"], ["look", "Worth a look"], ["good", "Good news"]];
+const S = { tab: "all", done: {}, inbox: {}, picking: false, pick: null };
+
+function snack(text, undoFn, kind = "success") {
+  const s = $("snack"); s.className = "ap-snackbar snack " + kind;
+  $("snackText").textContent = text;
+  $("snackRight").innerHTML = undoFn ? `<button type="button" id="snackUndo">Undo</button>` : "";
+  s.hidden = false;
+  if (undoFn) $("snackUndo").onclick = () => { undoFn(); s.hidden = true; };
+  clearTimeout(snack.t); snack.t = setTimeout(() => (s.hidden = true), undoFn ? 6000 : 2800);
+}
+
+function content(it) {
+  if (it.id === "inbox") {
+    const t = [["spam", "9", "Spam comments", "Hide all", "hidden"], ["ready", "21", "Replies ready to send", "Send all", "sent"], ["calls", "6", "Need your call", "Review in Inbox", "opened in Inbox"]];
+    return `<div class="tiles">${t.map(([k, n, label, cta, past]) => S.inbox[k]
+      ? `<div class="tile done"><p class="ap-caption muted">${label}</p><p class="value">${n}</p><p class="ap-caption-bold" style="color:var(--ref-color-green-150)">${icon("check")} ${past}</p></div>`
+      : `<div class="tile"><p class="ap-caption muted">${label}</p><p class="value">${n}</p><button type="button" class="ap-button stroked grey" data-act="inbox" data-k="${k}">${cta}</button></div>`).join("")}</div>`;
+  }
+  if (it.id === "post") return `<div class="post"><img src="assets/post-lamp.jpg" alt="Opale lamp on a side table"><div class="stack">
+      <div class="row"><i class="ap-icon-instagram-official" aria-hidden="true"></i><p class="ap-body-bold">Maison Lumen</p><p class="ap-caption muted">@maisonlumen</p></div>
+      <p class="ap-body">The Opale collection is here. Three pieces, one light. See you Thursday in store.</p>
+      <p class="ap-caption muted">Thursday, November 21 at 10:00 · 1 image</p></div></div>`;
+  if (it.id === "spike") return `<div class="tiles">
+      <div class="tile"><p class="ap-caption muted">Mentions, last 24 hours</p><p class="value">1,284</p><span class="delta bad">${icon("arrow-up")}310% vs usual</span></div>
+      <div class="tile"><p class="ap-caption muted">Positive mentions</p><p class="value">58%</p></div>
+      <div class="tile"><p class="ap-caption muted">Negative mentions</p><p class="value">15%</p></div></div>
+    <div class="quote"><div class="row"><i class="ap-icon-tiktok-official" aria-hidden="true"></i><p class="ap-caption-bold">@deco.lou</p><p class="ap-caption muted">TikTok · 48K views</p></div><p class="ap-body">“Spotted the Opale lamp at Maison Lumen, I need it in my living room.”</p></div>`;
+  if (it.id === "gap") {
+    const days = [["Mon", "2 posts"], ["Tue", "1 post"], ["Wed", S.done.gap ? "1 post" : "Nothing yet"], ["Thu", "2 posts"], ["Fri", "1 post"]];
+    let html = `<div class="week">${days.map(([d, n]) => `<div class="day${d === "Wed" ? (S.done.gap ? " filled" : " empty") : ""}"><p class="ap-caption-bold">${d}</p><p class="ap-caption muted">${n}</p></div>`).join("")}</div>`;
+    if (S.picking) html += `<div class="stack"><p class="ap-body-bold">Pick a draft for Wednesday at 10:00</p><div class="drafts">
+        <label class="draft"><span class="ap-radio-container"><input type="radio" name="draft" value="0" ${S.pick === 0 ? "checked" : ""}><span></span></span><img src="assets/post-atelier.jpg" alt=""><span class="stack"><span class="ap-body-bold">Behind the scenes at the workshop</span><span class="ap-caption muted">Reel · Drafted by Julie</span></span></label>
+        <label class="draft"><span class="ap-radio-container"><input type="radio" name="draft" value="1" ${S.pick === 1 ? "checked" : ""}><span></span></span><img src="assets/post-lamp.jpg" alt=""><span class="stack"><span class="ap-body-bold">Opale in white, close-up</span><span class="ap-caption muted">Image · Drafted by Thomas</span></span></label>
+      </div><p class="ap-caption" id="pickErr" role="alert" style="color:var(--ref-color-red-150)"></p></div>`;
+    return html;
+  }
+  if (it.id === "kpi") return `<div class="tiles">
+      <div class="tile"><p class="ap-caption muted">Engagements</p><p class="value">4,218</p><span class="delta good">${icon("arrow-up")}12%</span></div>
+      <div class="tile"><p class="ap-caption muted">Reach</p><p class="value">38.6K</p><span class="delta good">${icon("arrow-up")}8%</span></div>
+      <div class="tile"><p class="ap-caption muted">Video views</p><p class="value">12.9K</p><span class="delta good">${icon("arrow-up")}21%</span></div></div>
+    <svg class="spark" viewBox="0 0 300 56" preserveAspectRatio="none" role="img" aria-label="Daily engagements over the last 30 days, rising, compared with the previous 30 days">
+      <polyline fill="none" stroke="var(--ref-color-grey-40)" stroke-width="1.5" stroke-dasharray="4 3" vector-effect="non-scaling-stroke" points="0,46 50,44 100,42 150,41 200,39 250,37 300,35"/>
+      <polyline fill="none" stroke="var(--ref-color-orange-100)" stroke-width="2" vector-effect="non-scaling-stroke" points="0,44 30,40 60,42 90,35 120,37 150,30 180,28 210,23 240,18 270,14 300,8"/></svg>
+    <div class="row"><span class="row"><span style="width:12px;height:2px;background:var(--ref-color-orange-100)"></span><span class="ap-caption muted">Engagements, last 30 days</span></span><span class="row" style="margin-left:var(--ref-spacing-sm)"><span style="width:12px;height:2px;background:var(--ref-color-grey-40)"></span><span class="ap-caption muted">Previous 30 days</span></span></div>`;
+}
+
+function actions(it) {
+  const snooze = `<button type="button" class="ap-icon-button" data-act="snooze" data-id="${it.id}" aria-label="Snooze until tomorrow" title="Snooze until tomorrow"><i class="ap-icon-clock"></i></button>`;
+  if (it.id === "inbox") return `${snooze}<a class="ap-link small standalone" href="#" data-nav="Inbox">Open Inbox <i class="ap-icon-external-link"></i></a>`;
+  if (it.id === "post") return `${snooze}<button type="button" class="ap-button ghost grey" data-act="changes">Request changes</button><button type="button" class="ap-button primary orange" data-act="done" data-id="post">Approve</button>`;
+  if (it.id === "spike") return `${snooze}<a class="ap-link small standalone" href="#" data-nav="Listening">See mentions</a><button type="button" class="ap-button stroked grey" data-act="done" data-id="spike"><i class="ap-icon-pen"></i><span>Draft a post</span></button>`;
+  if (it.id === "gap") return S.picking
+    ? `<button type="button" class="ap-button ghost grey" data-act="pickcancel">Cancel</button><button type="button" class="ap-button primary orange" data-act="schedule">Schedule</button>`
+    : `${snooze}<a class="ap-link small standalone" href="#" data-nav="Calendar">Open calendar</a><button type="button" class="ap-button stroked grey" data-act="pick"><i class="ap-icon-calendar--plus"></i><span>Fill with a draft</span></button>`;
+  if (it.id === "kpi") return `${snooze}<a class="ap-link small standalone" href="#" data-nav="Reports">Open report</a><button type="button" class="ap-button stroked grey" data-act="done" data-id="kpi"><i class="ap-icon-data-report--plus"></i><span>Add to a report</span></button>`;
+}
+
+function card(it) {
+  return `<article class="ap-card item" aria-labelledby="t-${it.id}">
+    <div class="item-head"><span class="item-icon">${icon(it.icon)}</span>
+      <div class="stack spacer"><h3 class="ap-h3" id="t-${it.id}">${esc(it.title)}</h3><p class="ap-caption muted">${esc(it.meta)}</p></div>
+      <span class="ap-status ${it.status[0]}">${esc(it.status[1])}</span></div>
+    <p class="why ap-caption muted">${icon("sparkles-mermaid")}<span>${esc(it.why)}</span></p>
+    ${content(it)}
+    <div class="item-foot"><div class="actions">${actions(it)}</div></div>
+  </article>`;
+}
+
+function render() {
+  const open = ITEMS.filter((i) => !S.done[i.id]);
+  const done = ITEMS.filter((i) => S.done[i.id]);
+  const count = (g) => open.filter((i) => g === "all" || i.group === g).length;
+  $("tabs").innerHTML = [["all", "All"], ...GROUPS].map(([k, l]) => `<button type="button" class="ap-tabs-tab${k === S.tab ? " active" : ""}" role="tab" aria-selected="${k === S.tab}" data-tab="${k}">${l}<span class="ap-counter normal ${k === S.tab ? "blue" : "grey"}">${count(k)}</span></button>`).join("");
+  $("railCount").textContent = open.length; $("railCount").hidden = !open.length;
+  $("dayCount").textContent = `${done.length} of ${ITEMS.length} done`;
+  $("meter").style.width = `${Math.round(done.length / ITEMS.length * 100)}%`;
+  const you = open.filter((i) => i.group === "you").length;
+  $("dayLeft").textContent = open.length ? (you ? `${you} still need${you > 1 ? "" : "s"} you` : "Nothing urgent left") : "All clear";
+
+  let html = `<div class="intro"><p class="ap-body muted">${open.length ? `${open.length} ${open.length > 1 ? "things" : "thing"} since Friday 18:00 for Maison Lumen. ${you ? `${you} need${you > 1 ? "" : "s"} you.` : "Nothing urgent."}` : "You're all caught up."}</p></div>`;
+  let any = false;
+  for (const [g, label] of GROUPS) {
+    if (S.tab !== "all" && S.tab !== g) continue;
+    const list = open.filter((i) => i.group === g);
+    if (!list.length) continue;
+    any = true;
+    html += `<section class="group" aria-label="${label}"><div class="group-head"><h2 class="ap-h2">${label}</h2><span class="ap-counter normal grey">${list.length}</span></div>${list.map(card).join("")}</section>`;
+  }
+  if (!any) html += `<section class="ap-card sec"><div class="empty"><i class="ap-icon-rounded-check_fill" aria-hidden="true"></i><h2 class="ap-h3">${open.length ? "Nothing left here" : "All clear. Nothing needs you right now."}</h2><p class="ap-body muted">${open.length ? "Other items are waiting in the other tabs." : "Your agents keep watching the Inbox, the calendar and your mentions. New items show up here and in your morning briefing."}</p>${open.length ? `<button type="button" class="ap-button primary blue" data-tab="all">Show all</button>` : ""}</div></section>`;
+  if (done.length) html += `<section class="ap-card sec"><div class="row"><h2 class="ap-h3 spacer">Done today</h2><span class="ap-counter normal grey">${done.length}</span></div><div>${done.map((i) => `<div class="list-row"><i class="ap-icon-rounded-check_fill ok" aria-hidden="true"></i><p class="ap-body spacer">${esc(S.done[i.id])}</p><button type="button" class="ap-button ghost grey" data-act="undo" data-id="${i.id}">Undo</button></div>`).join("")}</div></section>`;
+  $("feed").innerHTML = html;
+}
+
+function finish(id, text) {
+  S.done[id] = text; render();
+  snack(text, () => undo(id));
+}
+function undo(id) {
+  delete S.done[id];
+  if (id === "inbox") S.inbox = {};
+  if (id === "gap") { S.pick = null; }
+  render();
+}
+
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-act],[data-nav],[data-tab]");
+  if (!el) return;
+  if (el.dataset.tab) { S.tab = el.dataset.tab; return render(); }
+  if (el.dataset.nav) { e.preventDefault(); return snack(`${el.dataset.nav} isn't part of this prototype`, null, "info"); }
+  const { act, id } = el.dataset;
+  const it = ITEMS.find((i) => i.id === id);
+  if (act === "done") finish(id, it.done);
+  if (act === "snooze") { S.done[id] = `${it.title} · snoozed until tomorrow`; render(); snack("Snoozed until tomorrow 9:00", () => undo(id), "info"); }
+  if (act === "undo") undo(id);
+  if (act === "changes") snack("This would open a note to Thomas", null, "info");
+  if (act === "pick") { S.picking = true; render(); }
+  if (act === "pickcancel") { S.picking = false; S.pick = null; render(); }
+  if (act === "schedule") {
+    if (S.pick == null) { $("pickErr").textContent = "Pick one of the two drafts first."; return; }
+    S.picking = false; finish("gap", `Wednesday 10:00 filled with “${S.pick === 0 ? "Behind the scenes at the workshop" : "Opale in white, close-up"}”`);
+  }
+  if (act === "inbox") {
+    const k = el.dataset.k;
+    S.inbox[k] = true;
+    if (S.inbox.spam && S.inbox.ready && S.inbox.calls) return finish("inbox", ITEMS[0].done);
+    render();
+    snack(k === "spam" ? "9 spam comments hidden" : k === "ready" ? "21 replies sent" : "6 items opened in the Inbox", () => { delete S.inbox[k]; render(); });
+  }
+});
+document.addEventListener("change", (e) => {
+  if (e.target.name === "draft") { S.pick = Number(e.target.value); const err = $("pickErr"); if (err) err.textContent = ""; }
+  if (e.target.dataset.toggle) snack(`${e.target.dataset.toggle} ${e.target.checked ? "on" : "off"}`, null, "info");
+});
+
+// O5 collapse / expand
+(() => {
+  const rail = document.querySelector(".app-rail"), toggle = rail.querySelector(".app-rail-toggle");
+  const KEY = "today-proto-rail-collapsed";
+  const saved = (() => { try { return localStorage.getItem(KEY); } catch { return null; } })();
+  const apply = (c) => { rail.classList.toggle("is-collapsed", c); toggle.setAttribute("aria-expanded", String(!c)); toggle.setAttribute("aria-label", c ? "Expand navigation" : "Collapse navigation"); toggle.querySelector("i").className = c ? "ap-icon-arrow-expand" : "ap-icon-arrow-reduce"; };
+  apply(saved !== null ? saved === "true" : innerWidth < 1440);
+  toggle.addEventListener("click", () => { const c = !rail.classList.contains("is-collapsed"); apply(c); try { localStorage.setItem(KEY, String(c)); } catch {} });
+  addEventListener("resize", () => { let s = null; try { s = localStorage.getItem(KEY); } catch {} if (s === null) apply(innerWidth < 1440); });
+})();
+render();
+</script>
+</body>
+</html>

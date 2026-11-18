@@ -1,0 +1,167 @@
+<!doctype html>
+<!-- mode: html-prototype · design-guidelines · DS: @agorapulse/ui-theme@22.0.7 + ui-symbol@22.0.0 via jsDelivr
+     O3 top bar with back button, P11 grey-bg ground, S1 section cards, E1 table for the data model.
+     The AI assistant and team chat frames are neutral stand-ins, not any vendor's UI. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One action item, three surfaces · Agorapulse prototype</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@agorapulse/ui-theme@22.0.7/assets/desktop_variables.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@agorapulse/ui-theme@22.0.7/assets/style/css-ui/font-face.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@agorapulse/ui-symbol@22.0.0/icons/ap-icons.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@agorapulse/ui-theme@22.0.7/assets/style/css-ui/index.css">
+<style>
+  *, *::before, *::after { box-sizing:border-box; }
+  body { margin:0; background:var(--ref-color-grey-bg); color:var(--ref-color-grey-100); font-family:var(--ref-font-family); font-size:var(--ref-font-size-sm); -webkit-font-smoothing:antialiased; }
+  h1,h2,h3,p { margin:0; }
+  .muted { color:var(--ref-color-grey-80); }
+  .row { display:flex; align-items:center; gap:var(--ref-spacing-xxs); min-width:0; }
+  .stack { display:flex; flex-direction:column; gap:var(--ref-spacing-xxs); min-width:0; }
+  .spacer { flex:1; min-width:0; }
+  .ap-icon-sparkles-mermaid { background:linear-gradient(135deg,var(--ref-color-mermaid-gradient-from),var(--ref-color-mermaid-gradient-to)); }
+
+  .page-header { position:sticky; top:0; z-index:5; height:60px; padding:0 var(--ref-spacing-md); display:flex; align-items:center; gap:var(--ref-spacing-xxs); background:var(--ref-color-white); border-bottom:1px solid var(--ref-color-grey-20); }
+  .content { padding:var(--ref-spacing-sm) var(--ref-spacing-sm) var(--ref-spacing-xl); }
+  .wrap { max-width:1200px; margin:0 auto; display:flex; flex-direction:column; gap:var(--ref-spacing-sm); }
+  .intro { max-width:700px; display:flex; flex-direction:column; gap:var(--ref-spacing-xxs); padding:var(--ref-spacing-xs) 0; }
+
+  .surfaces { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--ref-spacing-sm); align-items:stretch; }
+  .ap-card.sec { padding:var(--ref-spacing-sm); display:flex; flex-direction:column; gap:var(--ref-spacing-sm); border:1px solid var(--ref-color-grey-20); border-radius:var(--ref-border-radius-md); }
+  .who { display:flex; flex-direction:column; gap:var(--ref-spacing-xxxs); }
+  .stage { background:var(--ref-color-grey-05); border-radius:var(--ref-border-radius-md); padding:var(--ref-spacing-sm); display:flex; flex-direction:column; gap:var(--ref-spacing-xs); flex:1; }
+
+  /* the item, as each surface draws it (white on the grey-05 stage) */
+  .tile { background:var(--ref-color-white); border:1px solid var(--ref-color-grey-20); border-radius:var(--ref-border-radius-md); padding:var(--ref-spacing-sm); display:flex; flex-direction:column; gap:var(--ref-spacing-xs); }
+  .tile-head { display:flex; gap:var(--ref-spacing-xs); align-items:flex-start; }
+  .item-icon { width:32px; height:32px; border-radius:var(--ref-border-radius-md); background:var(--ref-color-grey-05); display:grid; place-items:center; flex:none; }
+  .item-icon > i { font-size:16px; }
+  .acts { display:flex; gap:var(--ref-spacing-xs); justify-content:flex-end; flex-wrap:wrap; }
+  .assistant { font-family:Georgia,"Times New Roman",serif; font-size:15px; line-height:1.5; }
+  .user-msg { align-self:flex-end; background:var(--ref-color-white); border:1px solid var(--ref-color-grey-20); border-radius:var(--ref-border-radius-md); padding:var(--ref-spacing-xxs) var(--ref-spacing-xs); }
+  .bot { width:32px; height:32px; border-radius:var(--ref-border-radius-sm); background:var(--ref-color-white); border:1px solid var(--ref-color-grey-20); display:grid; place-items:center; flex:none; overflow:hidden; }
+  .bot img { width:18px; height:18px; }
+  .msg { display:flex; gap:var(--ref-spacing-xs); align-items:flex-start; }
+  .done-line { display:flex; align-items:center; gap:var(--ref-spacing-xxs); color:var(--ref-color-green-150); }
+
+  .sync { display:flex; align-items:center; gap:var(--ref-spacing-xs); }
+  .ap-table code { font:12px ui-monospace,"SF Mono",Menlo,monospace; background:var(--ref-color-grey-05); padding:1px 4px; border-radius:4px; }
+  .table-wrap { overflow-x:auto; }
+  .table-wrap table { min-width:640px; width:100%; }
+
+  .snack { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:80; }
+  [hidden] { display:none !important; }
+  @media (max-width:1000px){ .surfaces { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header class="page-header">
+  <a class="ap-icon-button" href="index.html" aria-label="Back to Today" title="Back to Today"><i class="ap-icon-arrow-left"></i></a>
+  <h1 class="ap-h2">One action item, three surfaces</h1>
+</header>
+
+<div class="content"><div class="wrap">
+  <div class="intro">
+    <p class="ap-body">Every entry on the Today page is an <b>action item</b>: what happened, why it matters, how urgent it is, and what to do. Designed once, the same item shows up wherever the person is.</p>
+    <p class="ap-body muted">Approve the post on any surface below: it's done on the other two as well.</p>
+  </div>
+
+  <div class="surfaces">
+    <section class="ap-card sec" aria-labelledby="s1">
+      <div class="who"><h2 class="ap-h3" id="s1">In Agorapulse, on Today</h2><p class="ap-caption muted">For people who work in Agorapulse all day. They see it without asking.</p></div>
+      <div class="stage">
+        <div class="tile">
+          <div class="tile-head"><span class="item-icon"><i class="ap-icon-feature-publishing" aria-hidden="true"></i></span><div class="stack spacer"><h3 class="ap-body-bold">1 post waiting for your approval</h3><p class="ap-caption muted">Publishing · Created by Thomas Bernard</p><span class="ap-status orange" style="align-self:flex-start">Goes out Thu 10:00</span></div></div>
+          <p class="ap-caption muted">You approve posts on @maisonlumen.</p>
+          <div class="acts" data-surface="app"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ap-card sec" aria-labelledby="s2">
+      <div class="who"><h2 class="ap-h3" id="s2">In an AI assistant, in the briefing</h2><p class="ap-caption muted">For approvers and managers. One question, or a scheduled briefing, brings it up.</p></div>
+      <div class="stage">
+        <p class="user-msg ap-body">What should I look at today?</p>
+        <p class="assistant">Here's your Monday briefing for Maison Lumen. Two things need you:</p>
+        <div class="tile">
+          <div class="tile-head"><span class="item-icon"><i class="ap-icon-feature-publishing" aria-hidden="true"></i></span><div class="stack spacer"><h3 class="ap-body-bold">1 post waiting for your approval</h3><p class="ap-caption muted">Instagram · Thursday 10:00</p></div></div>
+          <div class="acts" data-surface="assistant"></div>
+        </div>
+        <p class="ap-caption muted">An Agorapulse card inside the conversation (MCP App).</p>
+      </div>
+    </section>
+
+    <section class="ap-card sec" aria-labelledby="s3">
+      <div class="who"><h2 class="ap-h3" id="s3">In the team chat, as a notification</h2><p class="ap-caption muted">To bring people back when something can't wait. Only items that need them.</p></div>
+      <div class="stage">
+        <div class="msg">
+          <span class="bot"><img src="https://app.agorapulse.com/assets/img/organization/agorapulse-logo-3d-alpha.png" alt=""></span>
+          <div class="stack spacer">
+            <p class="ap-caption"><b>Agorapulse</b> <span class="muted">9:02</span></p>
+            <div class="tile">
+              <p class="ap-body-bold">Thomas needs your approval on 1 post</p>
+              <p class="ap-caption muted">Instagram · goes out Thursday 10:00</p>
+              <div class="acts" data-surface="chat"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p class="sync ap-body-bold" id="sync" aria-live="polite" hidden><i class="ap-icon-rounded-check_fill" style="color:var(--ref-color-green-100)" aria-hidden="true"></i><span id="syncText"></span><button type="button" class="ap-button ghost grey" id="reset">Undo</button></p>
+
+  <section class="ap-card sec" aria-labelledby="model">
+    <div class="who"><h2 class="ap-h3" id="model">The action item</h2><p class="ap-caption muted">One object, read by every surface. Each surface picks what it has room for.</p></div>
+    <div class="table-wrap">
+      <table class="ap-table outer-border header-background">
+        <thead><tr><th>Field</th><th>What it holds</th><th>Example</th><th>Today</th><th>Assistant</th><th>Team chat</th></tr></thead>
+        <tbody>
+          <tr><td><code>title</code></td><td>What happened, in one line</td><td>1 post waiting for your approval</td><td>Yes</td><td>Yes</td><td>Yes, addressed to the person</td></tr>
+          <tr><td><code>context</code></td><td>Where and when, from the source object</td><td>Instagram · goes out Thursday 10:00</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+          <tr><td><code>priority</code></td><td>Needs you, Worth a look, Good news</td><td>Needs you</td><td>Groups and order</td><td>Order</td><td>Only Needs you is sent</td></tr>
+          <tr><td><code>why</code></td><td>The agent's reason, when it isn't obvious</td><td>You approve posts on @maisonlumen</td><td>Yes</td><td>Said by the assistant</td><td>No</td></tr>
+          <tr><td><code>actions</code></td><td>1 to 3 actions, the first doable in place</td><td>Approve · Request changes</td><td>All</td><td>First one</td><td>First one + open</td></tr>
+          <tr><td><code>detail</code></td><td>The full view to open</td><td><code>show_post</code> card or the post in Publishing</td><td>Inline</td><td>MCP App card</td><td>Link</td></tr>
+          <tr><td><code>state</code></td><td>Open, done or snoozed, shared everywhere</td><td>Done by Camille at 9:14</td><td colspan="3">Clears on all surfaces at once</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div></div>
+
+<div class="ap-snackbar success snack" id="snack" hidden><div class="ap-snackbar-left"><i></i><span id="snackText"></span></div></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BUTTONS = {
+  app: `<button type="button" class="ap-button ghost grey" data-act="changes">Request changes</button><button type="button" class="ap-button primary orange" data-act="approve" data-from="Today">Approve</button>`,
+  assistant: `<button type="button" class="ap-button stroked grey" data-act="open">Open the post</button><button type="button" class="ap-button primary orange" data-act="approve" data-from="the AI assistant">Approve</button>`,
+  chat: `<button type="button" class="ap-button ghost grey" data-act="open">Open in Agorapulse</button><button type="button" class="ap-button stroked grey" data-act="approve" data-from="the team chat">Approve</button>`,
+};
+let approved = null;
+function render() {
+  document.querySelectorAll("[data-surface]").forEach((el) => {
+    el.innerHTML = approved
+      ? `<p class="done-line ap-caption-bold"><i class="ap-icon-rounded-check_fill" aria-hidden="true"></i>Approved by Camille from ${approved}</p>`
+      : BUTTONS[el.dataset.surface];
+  });
+  $("sync").hidden = !approved;
+  if (approved) $("syncText").textContent = `Approved from ${approved}. The item is done everywhere.`;
+}
+function snack(text) {
+  const s = $("snack"); s.className = "ap-snackbar snack info"; $("snackText").textContent = text; s.hidden = false;
+  clearTimeout(snack.t); snack.t = setTimeout(() => (s.hidden = true), 2800);
+}
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-act],#reset");
+  if (!el) return;
+  if (el.id === "reset") { approved = null; return render(); }
+  if (el.dataset.act === "approve") { approved = el.dataset.from; render(); }
+  if (el.dataset.act === "changes") snack("This would open a note to Thomas");
+  if (el.dataset.act === "open") snack("This would open the post in Agorapulse");
+});
+render();
+</script>
+</body>
+</html>
